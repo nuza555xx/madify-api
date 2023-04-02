@@ -17,7 +17,14 @@ export class PrepareQuery {
       filters['credentials.accessTokenExpiration'] =
         query.credentials?.accessTokenExpiration;
 
-    if (query?.credentials?.accessToken)
+    if (query?.credentials?.refreshToken)
+      filters['credentials.refreshToken'] = query.credentials?.refreshToken;
+
+    if (query?.credentials?.refreshTokenExpiration)
+      filters['credentials.refreshTokenExpiration'] =
+        query.credentials?.refreshTokenExpiration;
+
+    if (query?.credentials?.platform)
       filters['credentials.platform'] = query?.credentials?.platform;
 
     if (query?.credentials?.uuid)

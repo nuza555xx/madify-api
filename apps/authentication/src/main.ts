@@ -6,6 +6,7 @@ import {
 } from '@nestjs/platform-fastify';
 import fastifyHelmet from '@fastify/helmet';
 import fastifyCsrf from '@fastify/csrf-protection';
+import compression from '@fastify/compress';
 import { APIPrefix } from '@madify-api/config';
 import { Documentation, getHelmetOptions } from '@madify-api/common';
 import { MadifyExceptionFilter } from '@madify-api/exception';
@@ -32,6 +33,7 @@ async function bootstrap() {
 
   await app.register(fastifyCsrf);
   await app.register(fastifyHelmet, getHelmetOptions);
+  await app.register(compression, { encodings: ['gzip', 'deflate'] });
   await app.listen(port, '0.0.0.0');
 
   Logger.debug(`🚀 Application is running on: ${await app.getUrl()}/${path}`);

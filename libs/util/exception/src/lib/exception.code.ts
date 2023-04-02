@@ -7,7 +7,7 @@ export const Errors = {
   MISSING_AUTHORIZATION_HEADERS: {
     statusCode: 401,
     code: '1001',
-    message: 'Missing Authorization header.',
+    message: 'Missing authorization header.',
   },
   MISSING_METADATA_HEADERS: {
     statusCode: 400,

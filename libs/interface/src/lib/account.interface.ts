@@ -30,3 +30,7 @@ export class IRegisterFirebase {
   uuid: string;
   platform: AcceptPlatform;
 }
+
+export interface IRefreshToken extends RequestMetadata {
+  refreshToken: string;
+}

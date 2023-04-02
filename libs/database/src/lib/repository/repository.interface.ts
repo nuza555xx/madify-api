@@ -14,6 +14,8 @@ export type AccountQuery = {
     platform?: AcceptPlatform;
     accessToken?: string;
     accessTokenExpiration?: QuerySelector<Date>;
+    refreshToken?: string;
+    refreshTokenExpiration?: QuerySelector<Date>;
   };
 };
 
