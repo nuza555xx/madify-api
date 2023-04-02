@@ -14,7 +14,19 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@madify-api/common": ["libs/common/src/index.ts"],
+      "@madify-api/config": ["libs/config/src/index.ts"],
+      "@madify-api/database": ["libs/database/src/index.ts"],
+      "@madify-api/decorator": ["libs/util/decorator/src/index.ts"],
+      "@madify-api/enum": ["libs/enum/src/index.ts"],
+      "@madify-api/exception": ["libs/util/exception/src/index.ts"],
+      "@madify-api/interceptor": ["libs/util/interceptor/src/index.ts"],
+      "@madify-api/interface": ["libs/interface/src/index.ts"],
+      "@madify-api/jwt": ["libs/util/jwt/src/index.ts"],
+      "@madify-api/module": ["libs/module/src/index.ts"],
+      "@madify-api/gcp": ["libs/util/gcp/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
