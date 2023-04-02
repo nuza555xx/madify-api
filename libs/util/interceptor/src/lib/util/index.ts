@@ -3,8 +3,8 @@ import { HttpStatus } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 
 export const getTokenFromRequest = (request: FastifyRequest) => {
-  const token = request.headers.authorization?.replace(/^bearer /i, '');
+  const [type, token] = request.headers.authorization?.split(' ') ?? [];
   if (!token) throw new MadifyException('MISSING_AUTHORIZATION_HEADERS');
 
-  return token;
+  return type === 'Bearer' ? token : undefined;
 };
