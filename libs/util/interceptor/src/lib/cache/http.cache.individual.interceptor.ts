@@ -7,6 +7,7 @@ import {
 import { Cache } from 'cache-manager';
 import { FastifyRequest } from 'fastify';
 import { getTokenFromRequest } from '../util';
+
 @Injectable()
 export class HttpCacheIndividualInterceptor extends CacheInterceptor {
   trackBy(ctx: ExecutionContext): string | undefined {

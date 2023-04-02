@@ -1,3 +1,4 @@
+import { EntityVisibility } from '@madify-api/enum';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { VehicleService } from './vehicle.abstract';
 import {
@@ -48,7 +49,7 @@ export class VehicleImpl implements VehicleService {
     };
 
     const vehicles = await this.repository.findVehicles(
-      { ...query, accountId },
+      { ...query, accountId, visibility: EntityVisibility.Publish },
       queryOptions
     );
 
