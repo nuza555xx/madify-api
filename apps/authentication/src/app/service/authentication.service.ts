@@ -6,6 +6,7 @@ import {
   IGenerateToken,
   IJwtConfig,
   ILoginWithEmail,
+  IRefreshToken,
   IRegisterFirebase,
   IRegisterWithEmail,
   IResponseLogin,
@@ -25,7 +26,7 @@ export class AuthenticationImpl implements AuthenticationService {
   ) {}
 
   private async generateAllToken(account: Account): Promise<IGenerateToken> {
-    const { accessTokenExpiresIn, refreshTokenExpiresIn } =
+    const { accessTokenExpiresIn, refreshTokenExpiresIn, secret } =
       this.configService.get<IJwtConfig>(ConfigKey.JWT);
 
     const accessTokenExpiration = DateTime.now()
@@ -39,7 +40,7 @@ export class AuthenticationImpl implements AuthenticationService {
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.generate(
         { id: account._id, expirationDate: accessTokenExpiration },
-        { expiresIn: accessTokenExpiresIn }
+        { expiresIn: accessTokenExpiresIn, secret }
       ),
       this.tokenService.generate(
         {
@@ -47,7 +48,7 @@ export class AuthenticationImpl implements AuthenticationService {
           expirationDate: refreshTokenExpiration,
           accessTokenExpireTime: accessTokenExpiration,
         },
-        { expiresIn: refreshTokenExpiresIn }
+        { expiresIn: refreshTokenExpiresIn, secret }
       ),
     ]);
 
@@ -66,13 +67,10 @@ export class AuthenticationImpl implements AuthenticationService {
     dto.password = await MadifyHash.hash(dto.password);
 
     const isExists = await this.repository.findAccount(dto);
-    if (isExists) {
-      throw new MadifyException('DUPLICATE_EMAIL');
-    }
+    if (isExists) throw new MadifyException('DUPLICATE_EMAIL');
+
     const account = await this.repository.createAccount(dto);
-    if (!account) {
-      throw new MadifyException('NOT_FOUND_DATA');
-    }
+    if (!account) throw new MadifyException('NOT_FOUND_DATA');
 
     const token = await this.generateAllToken(account);
 
@@ -104,11 +102,11 @@ export class AuthenticationImpl implements AuthenticationService {
     }
 
     const token = await this.generateAllToken(account);
-    const credential = account.credentials.find(
+    let credential = account.credentials.find(
       ({ uuid, platform }) => dto.uuid === uuid && dto.platform === platform
     );
 
-    if (credential)
+    if (credential) {
       await this.repository.updateAccount(
         {
           id: account._id,
@@ -127,12 +125,15 @@ export class AuthenticationImpl implements AuthenticationService {
           },
         }
       );
-    //   (account.credentials ??= []).push({
-    //     platform: dto.platform,
-    //     uuid: dto.uuid,
-    //     ...token,
-    //   });
-    // await account.save();
+    } else {
+      (account.credentials ??= []).push({
+        platform: dto.platform,
+        uuid: dto.uuid,
+        ...token,
+      });
+      await account.save();
+    }
+
     return {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
@@ -167,5 +168,58 @@ export class AuthenticationImpl implements AuthenticationService {
         },
       }
     );
+  }
+
+  async refreshToken(dto: IRefreshToken): Promise<IResponseLogin> {
+    if (![dto.platform, dto.uuid].every((exists) => exists))
+      throw new MadifyException('MISSING_METADATA_HEADERS');
+
+    const { secret } = this.configService.get<IJwtConfig>(ConfigKey.JWT);
+
+    const decode = this.tokenService.isVerify(dto.refreshToken, { secret });
+
+    const account = await this.repository.findAccount({
+      id: decode.id,
+      credentials: {
+        refreshToken: dto.refreshToken,
+      },
+    });
+
+    if (!account) throw new MadifyException('NOT_FOUND_DATA');
+
+    const credential = account.credentials.find(
+      ({ uuid, platform }) => dto.uuid === uuid && dto.platform === platform
+    );
+
+    if (!credential) throw new MadifyException('FORBIDDEN');
+
+    if (new Date(credential.refreshTokenExpiration) < new Date())
+      throw new MadifyException('INVALID_REFRESH_TOKEN');
+
+    const token = await this.generateAllToken(account);
+
+    await this.repository.updateAccount(
+      {
+        id: account._id,
+        credentials: {
+          platform: dto.platform,
+          uuid: dto.uuid,
+        },
+      },
+      {
+        $set: {
+          'credentials.$': {
+            platform: dto.platform,
+            uuid: dto.uuid,
+            ...token,
+          },
+        },
+      }
+    );
+
+    return {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+    };
   }
 }

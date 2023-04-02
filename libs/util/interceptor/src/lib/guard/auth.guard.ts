@@ -37,9 +37,10 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthRequest>();
-    const token = request.headers.authorization?.replace(/^bearer /i, '');
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
 
-    if (!token) throw new MadifyException('MISSING_AUTHORIZATION_HEADERS');
+    if (type !== 'Bearer' || !token)
+      throw new MadifyException('MISSING_AUTHORIZATION_HEADERS');
 
     const payload = this.verifyToken(token);
 

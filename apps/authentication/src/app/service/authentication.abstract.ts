@@ -4,6 +4,7 @@ import {
   IResponseLogin,
   ILoginWithEmail,
   IRegisterFirebase,
+  IRefreshToken,
 } from '@madify-api/interface';
 
 export abstract class AuthenticationService {
@@ -20,4 +21,6 @@ export abstract class AuthenticationService {
     dto: IRegisterFirebase,
     account: Account
   ): Promise<void>;
+
+  abstract refreshToken(dto: IRefreshToken): Promise<IResponseLogin>;
 }

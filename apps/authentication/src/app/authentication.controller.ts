@@ -3,6 +3,7 @@ import { Body, Delete, Post } from '@nestjs/common';
 import {
   Auth,
   Authorizer,
+  BearerToken,
   MadifyBasicAuthorize,
   MadifyController,
   MadifySwaggerHeaderAuth,
@@ -14,12 +15,10 @@ import {
   LoginWithEmailDto,
   RegisterFirebaseDto,
   RegisterWithEmailDto,
-  RequestOTPDto,
 } from './authentication.dto';
 import { IResponseLogin } from '@madify-api/interface';
 import { AuthenticationService } from './service/authentication.abstract';
-import { ApiHeaders } from '@nestjs/swagger';
-import { AcceptPlatform } from '@madify-api/enum';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @MadifyController({ path: APIPrefix.AUTHENTICATION })
 export class AuthenticationController {
@@ -28,12 +27,11 @@ export class AuthenticationController {
   @MadifySwaggerHeaderAuth()
   @Post('register-with-email')
   registerWithEmail(
-    @RequestMeta() { device, ip, platform, uuid }: RequestMetadata,
+    @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: RegisterWithEmailDto
   ): Promise<IResponseLogin> {
     return this.authService.registerWithEmail({
       ...dto,
-      device,
       ip,
       platform,
       uuid,
@@ -43,12 +41,11 @@ export class AuthenticationController {
   @MadifySwaggerHeaderAuth()
   @Post('login-with-email')
   loginWithEmail(
-    @RequestMeta() { device, ip, platform, uuid }: RequestMetadata,
+    @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: LoginWithEmailDto
   ): Promise<IResponseLogin> {
     return this.authService.loginWithEmail({
       ...dto,
-      device,
       ip,
       platform,
       uuid,
@@ -71,6 +68,16 @@ export class AuthenticationController {
     @Body() dto: RegisterFirebaseDto
   ) {
     await this.authService.unregisterToken(dto, account);
+  }
+
+  @Post('refresh-token')
+  @ApiBearerAuth('JSON Web Token Authorization')
+  @MadifySwaggerHeaderAuth()
+  async refreshToken(
+    @RequestMeta() { platform, uuid }: RequestMetadata,
+    @BearerToken() refreshToken: string
+  ) {
+    return this.authService.refreshToken({ refreshToken, platform, uuid });
   }
 
   // @Post('forgot-password')
