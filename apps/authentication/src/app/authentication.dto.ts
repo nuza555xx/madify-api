@@ -22,6 +22,7 @@ export class RegisterWithEmailDto {
   @ApiProperty({
     name: 'password',
     example: '12345678',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -31,6 +32,8 @@ export class RegisterWithEmailDto {
   @ApiProperty({
     name: 'displayName',
     example: 'test@example.com',
+    description: 'This is a required property',
+
     required: true,
   })
   @IsString()
@@ -42,6 +45,7 @@ export class LoginWithEmailDto {
   @ApiProperty({
     name: 'email',
     example: 'test@example.com',
+    description: 'This is a required property',
     required: true,
   })
   @IsEmail()
@@ -50,6 +54,7 @@ export class LoginWithEmailDto {
   @ApiProperty({
     name: 'password',
     example: '12345678',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -61,6 +66,7 @@ export class RequestOTPDto {
   @ApiProperty({
     name: 'countryCode',
     example: '+66',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -70,6 +76,7 @@ export class RequestOTPDto {
   @ApiProperty({
     name: 'tel',
     example: '+66999999999',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -79,6 +86,7 @@ export class RequestOTPDto {
   @ApiProperty({
     name: 'objective',
     example: Objective.Verify,
+    description: 'This is a required property',
     required: true,
     enum: Objective,
   })
@@ -91,6 +99,7 @@ export class VerifyOTPDto {
   @ApiProperty({
     name: 'accessToken',
     example: 'ACCESS_TOKEN',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -101,6 +110,7 @@ export class VerifyOTPDto {
   @ApiProperty({
     name: 'refCode',
     example: '1234',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -109,14 +119,33 @@ export class VerifyOTPDto {
 }
 
 export class RegisterFirebaseDto {
+  @ApiProperty({
+    name: 'firebaseToken',
+    example: '',
+    description: 'This is a required property',
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   firebaseToken: string;
 
+  @ApiProperty({
+    name: 'uuid',
+    example: '',
+    description: 'This is a required property',
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   uuid: string;
 
+  @ApiProperty({
+    name: 'platform',
+    example: AcceptPlatform.Web,
+    description: 'This is a required property',
+    enum: AcceptPlatform,
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   @IsEnum(AcceptPlatform)
@@ -127,6 +156,7 @@ export class ForgotPasswordDto extends RequestOTPDto {
   @ApiProperty({
     name: 'objective',
     example: Objective.ForgotPassword,
+    description: 'This is a required property',
     required: true,
     enum: Objective,
   })

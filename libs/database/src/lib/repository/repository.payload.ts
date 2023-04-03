@@ -3,8 +3,17 @@ import { Account } from '../schema/account.schema';
 import { Vehicle } from '../schema/vehicle.schema';
 
 export class PayloadResponse {
-  static toVehicleResponse(vehicle: Vehicle): IResponseVehicle {
-    return vehicle;
+  static async toVehicleResponse(
+    vehicle: Vehicle,
+    options?: Record<string, any>
+  ): Promise<IResponseVehicle> {
+    return {
+      brand: vehicle.brand,
+      model: vehicle.model,
+      vehicleRegistration: vehicle.vehicleRegistration,
+      registrationProvince: vehicle.registrationProvince,
+      ...options,
+    };
   }
 
   static toProfileResponse(account: Account): IResponseProfile {

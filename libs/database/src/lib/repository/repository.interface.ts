@@ -1,5 +1,5 @@
 import { AcceptPlatform, EntityVisibility } from '@madify-api/enum';
-import { QuerySelector } from 'mongoose';
+import { QuerySelector, RootQuerySelector } from 'mongoose';
 
 export type AccountQuery = {
   id?: string;
@@ -23,9 +23,9 @@ export type VehicleQuery = {
   id?: string;
   accountId?: string;
   insureId?: string;
-  brandId?: string;
-  generationId?: string;
-  expiredYear?: string;
+  brand?: RootQuerySelector<string>;
+  model?: RootQuerySelector<string>;
+  expiredYear?: number;
   vehicleRegistration?: string;
   registrationProvince?: string;
   registrationCountry?: string;

@@ -4,6 +4,7 @@ import { redisStoreConfig, redisCacheConfig } from './redis/redis.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { mongooseConfig } from './mongoose/mongoose.config';
 import { throttlerConfig } from './throttler/throttler.config';
+import { storageConfig } from './gcp/storage.config';
 
 export const CONFIG_PROVIDE = 'config';
 @Module({
@@ -16,6 +17,7 @@ export const CONFIG_PROVIDE = 'config';
         redisCacheConfig,
         mongooseConfig,
         throttlerConfig,
+        storageConfig,
       ],
     }),
   ],

@@ -31,6 +31,7 @@ class UpdateMobileDto {
   @ApiProperty({
     name: 'countryCode',
     example: '+66',
+    description: 'This is a optional property',
     required: true,
   })
   @IsString()
@@ -40,6 +41,7 @@ class UpdateMobileDto {
   @ApiProperty({
     name: 'number',
     example: '999999999',
+    description: 'This is a optional property',
     required: true,
   })
   @IsString()
@@ -51,6 +53,7 @@ export class UpdateProfileDto {
   @ApiProperty({
     name: 'email',
     example: 'test@example.com',
+    description: 'This is a optional property',
     required: true,
   })
   @IsOptional()
@@ -60,15 +63,17 @@ export class UpdateProfileDto {
   @ApiProperty({
     name: 'displayName',
     example: 'test1@example.com',
+    description: 'This is a optional property',
     required: true,
   })
-  @IsString()
   @IsOptional()
+  @IsString()
   displayName?: string;
 
   @ApiProperty({
     name: 'mobile',
     examples: UpdateMobileDto,
+    description: 'This is a optional property',
     required: true,
     type: UpdateMobileDto,
   })
@@ -93,24 +98,24 @@ export class CreateVehicleDto {
   insureId: string;
 
   @ApiProperty({
-    name: 'brandId',
-    example: new Types.ObjectId(),
+    name: 'brand',
+    example: 'honda',
     description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
-  @IsMongoId()
-  brandId: string;
+  @IsString()
+  brand: string;
 
   @ApiProperty({
-    name: 'generationId',
-    example: new Types.ObjectId(),
+    name: 'model',
+    example: 'civic',
     description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
-  @IsMongoId()
-  generationId: string;
+  @IsString()
+  model: string;
 
   @ApiProperty({
     name: 'vehicleRegistration',
@@ -124,7 +129,7 @@ export class CreateVehicleDto {
 
   @ApiProperty({
     name: 'registrationProvince',
-    example: 'กทม',
+    example: 'chiang_mai',
     description: 'This is a required property',
     required: true,
   })
@@ -134,34 +139,44 @@ export class CreateVehicleDto {
 
   @ApiProperty({
     name: 'registrationCountry',
-    example: 'ไทย',
+    example: 'thailand',
     description: 'This is a required property',
     required: true,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  registrationCountry: string;
+  registrationCountry?: string;
 
   @ApiProperty({
     name: 'expiredYear',
-    example: '2025',
+    example: 2025,
     description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
-  @IsNumberString()
-  expiredYear: string;
+  @IsNumber()
+  @Type(() => Number)
+  expiredYear: number;
 
   @ApiProperty({
     name: 'insureRangeAmount',
     example: 2000.69,
-    description: 'This is a required property',
+    description: 'This is a optional property',
     required: false,
   })
-  @IsNotEmpty()
   @IsOptional()
   @Type(() => Number)
   insureRangeAmount?: number;
+
+  @ApiProperty({
+    name: 'image',
+    example: null,
+    description: 'This is a optional property',
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => String)
+  image?: string;
 }
 
 export class GetVehicleListQuery {

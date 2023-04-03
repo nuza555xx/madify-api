@@ -25,6 +25,15 @@ export interface IThrottlerConfig {
   ttl: number;
 }
 
+export interface IStorageConfig {
+  projectId: string;
+  clientEmail: string;
+  clientId: string;
+  privateKey: string;
+  bucketName: string;
+  expired: number;
+}
+
 export class Meta {
   page?: number;
   limit?: number;

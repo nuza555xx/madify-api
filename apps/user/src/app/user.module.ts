@@ -5,8 +5,9 @@ import { MadifyCacheModule, MadifyThrottlerModule } from '@madify-api/module';
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserImpl } from './service/user.service';
-import { UtilsInterceptorsModule } from '@madify-api/interceptor';
+import { MadifyInterceptorsModule } from '@madify-api/interceptor';
 import { UserService } from './service/user.abstract';
+import { MadifyGCPModule } from '@madify-api/gcp';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { UserService } from './service/user.abstract';
     MadifyJwtModule,
     MadifyThrottlerModule,
     MadifyCacheModule,
-    UtilsInterceptorsModule,
+    MadifyInterceptorsModule,
+    MadifyGCPModule,
   ],
   controllers: [UserController],
   providers: [
