@@ -22,19 +22,16 @@ export interface IUpdateProfile {
   displayName?: string;
 }
 
-export interface IImage {
-  name: string;
-  imageKey: string;
-}
 export interface ICreateVehicle {
   insureId: string;
-  brandId: string;
-  generationId: string;
-  expiredYear: string;
+  brand: string;
+  model: string;
+  expiredYear: number;
   vehicleRegistration: string;
   registrationProvince: string;
-  registrationCountry: string;
+  registrationCountry?: string;
   insureRangeAmount?: number;
+  image?: string;
 }
 
 export interface IResponseVehicle {}

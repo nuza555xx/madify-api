@@ -19,3 +19,7 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
+
+## Run script
+
+Run `npm run seed  -- PATH_FILE --url="MONGODB_URL" --dbName="DB_NAME"`

@@ -10,14 +10,14 @@ export class Vehicle extends BaseSchema {
   @Prop({ type: SchemaTypes.ObjectId, index: true, required: true })
   insureId: Types.ObjectId;
 
-  @Prop({ type: SchemaTypes.ObjectId, index: true, required: true })
-  brandId: Types.ObjectId;
-
-  @Prop({ type: Types.ObjectId, index: true, required: true })
-  generationId: Types.ObjectId;
+  @Prop({ type: SchemaTypes.String, index: true, required: true })
+  brand: string;
 
   @Prop({ type: SchemaTypes.String, index: true, required: true })
-  expiredYear: string;
+  model: string;
+
+  @Prop({ type: SchemaTypes.Number, index: true, required: true })
+  expiredYear: number;
 
   @Prop({ type: SchemaTypes.Decimal128 })
   insureRangeAmount?: number;
@@ -28,15 +28,18 @@ export class Vehicle extends BaseSchema {
   @Prop({ type: String, index: true, required: true })
   registrationProvince: string;
 
-  @Prop({ type: String, index: true, required: true })
-  registrationCountry: string;
+  @Prop({ type: String, index: true })
+  registrationCountry?: string;
+
+  @Prop({ type: SchemaTypes.String })
+  imageKey?: string;
 }
 
 export const VehicleSchema = SchemaFactory.createForClass(Vehicle)
-  .index({ accountId: 1 })
-  .index({ insureId: 1 })
-  .index({ brandId: 1 })
-  .index({ generationId: 1 })
-  .index({ vehicleRegistration: 1 })
-  .index({ vehicleRegistration: 1 })
-  .index({ registrationCountry: 1 });
+  .index({ accountId: 1 }, { background: true })
+  .index({ insureId: 1 }, { background: true })
+  .index({ brand: 'text' }, { background: true })
+  .index({ model: 'text' }, { background: true })
+  .index({ vehicleRegistration: 'text' }, { background: true })
+  .index({ vehicleRegistration: 'text' }, { background: true })
+  .index({ registrationCountry: 'text' }, { background: true });

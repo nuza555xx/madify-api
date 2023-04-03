@@ -11,18 +11,19 @@ class Name {
   en: string;
 }
 @Schema({ timestamps: true })
-export class VehicleBrand extends BaseSchema {
+export class VehicleModel extends BaseSchema {
   @Prop({ type: Name, required: true })
   name: Name;
 
   @Prop({ type: SchemaTypes.String, required: true })
-  slug: string;
+  brand: string;
 
-  @Prop({ type: SchemaTypes.String })
-  imageKey?: string;
+  @Prop({ type: SchemaTypes.String, required: true })
+  slug: string;
 }
 
-export const VehicleBrandSchema = SchemaFactory.createForClass(VehicleBrand)
+export const VehicleModelSchema = SchemaFactory.createForClass(VehicleModel)
+  .index({ brand: 1 }, { background: true })
   .index({ name: 1 }, { background: true })
   .index({ 'name.th': 1 }, { background: true })
   .index({ 'name.en': 1 }, { background: true })

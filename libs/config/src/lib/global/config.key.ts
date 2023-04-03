@@ -5,4 +5,5 @@ export enum ConfigKey {
   JWT = 'jwt',
   MONGOOSE = 'mongoose',
   THROTTLER = 'throttler',
+  STORAGE = 'storage',
 }
