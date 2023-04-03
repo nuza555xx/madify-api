@@ -6,4 +6,4 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [MadifyDatabaseModule, MadifyJwtModule, MadifyCacheModule],
 })
-export class UtilsInterceptorsModule {}
+export class MadifyInterceptorsModule {}

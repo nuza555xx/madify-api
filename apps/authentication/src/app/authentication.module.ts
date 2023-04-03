@@ -6,7 +6,7 @@ import { MadifyDatabaseModule } from '@madify-api/database';
 import { MadifyJwtModule } from '@madify-api/jwt';
 import { MadifyThrottlerModule } from '@madify-api/module';
 import { Module } from '@nestjs/common';
-import { UtilsInterceptorsModule } from '@madify-api/interceptor';
+import { MadifyInterceptorsModule } from '@madify-api/interceptor';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { UtilsInterceptorsModule } from '@madify-api/interceptor';
     MadifyDatabaseModule,
     MadifyJwtModule,
     MadifyThrottlerModule,
-    UtilsInterceptorsModule,
+    MadifyInterceptorsModule,
   ],
   controllers: [AuthenticationController],
   providers: [

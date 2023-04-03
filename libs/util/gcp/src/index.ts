@@ -1,1 +1,1 @@
-export * from './lib/util-gcp.module';
+export * from './lib/gcp.module';

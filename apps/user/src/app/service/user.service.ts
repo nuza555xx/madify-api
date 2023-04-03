@@ -12,16 +12,19 @@ import {
   IRepository,
   PayloadResponse,
 } from '@madify-api/database';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UserService } from './user.abstract';
 import { MadifyException } from '@madify-api/exception';
-import { QueryOptions } from 'mongoose';
+import { QueryOptions, Types } from 'mongoose';
 import { MadifyPagination } from '@madify-api/common';
+import { EntityVisibility } from '@madify-api/enum';
+import { STORAGE_PROVIDE, StorageService } from '@madify-api/gcp';
 
 @Injectable()
 export class UserImpl implements UserService {
   constructor(
-    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository
+    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
+    @Inject(STORAGE_PROVIDE) private readonly storage: StorageService
   ) {}
 
   async getProfile(accountId: string): Promise<IResponseProfile> {
@@ -58,12 +61,24 @@ export class UserImpl implements UserService {
   ): Promise<IResponseVehicle> {
     const vehicle = await this.repository.createVehicle({
       ...body,
-      accountId: accountId,
+      accountId: new Types.ObjectId(accountId),
+      visibility: EntityVisibility.Pending,
     });
+
+    if (body.image)
+      vehicle.imageKey = await this.storage.uploadFile(
+        `vehicle/${vehicle.id}/${vehicle.id}`,
+        body.image
+      );
 
     if (!vehicle) throw new MadifyException('SOMETHING_WRONG');
 
-    return PayloadResponse.toVehicleResponse(vehicle);
+    const image = body.image
+      ? await this.storage.generateSignedUrl(vehicle.imageKey)
+      : null;
+
+    await vehicle.save();
+    return PayloadResponse.toVehicleResponse(vehicle, { image });
   }
 
   async listVehicle(

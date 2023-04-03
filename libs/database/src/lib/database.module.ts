@@ -9,6 +9,10 @@ import {
   VehicleBrand,
   VehicleBrandSchema,
 } from './schema/vehicle.brand.schema';
+import {
+  VehicleModel,
+  VehicleModelSchema,
+} from './schema/vehicle.model.schema';
 
 const modelDefinitions: ModelDefinition[] = [
   {
@@ -20,12 +24,16 @@ const modelDefinitions: ModelDefinition[] = [
     schema: VehicleSchema,
   },
   {
-    name: Otp.name,
-    schema: OtpSchema,
-  },
-  {
     name: VehicleBrand.name,
     schema: VehicleBrandSchema,
+  },
+  {
+    name: VehicleModel.name,
+    schema: VehicleModelSchema,
+  },
+  {
+    name: Otp.name,
+    schema: OtpSchema,
   },
 ];
 

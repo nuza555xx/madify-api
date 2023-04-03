@@ -33,19 +33,15 @@ export class HttpCacheClearInterceptor implements NestInterceptor {
       const settingsString = await this.cacheManager.get<string>(token);
       const settings = settingsString ? JSON.parse(settingsString) : {};
 
-      const key = `${cacheKey}-${request.url}`;
-      const settingsKeyString = await this.cacheManager.get<string>(key);
-      const settingsKey = settingsKeyString
-        ? JSON.parse(settingsKeyString)
-        : {};
+      const keys = await this.cacheManager.store.keys();
+      const sharedCacheKey = keys.filter((el: string) =>
+        el.match(/shared-cache-/g)
+      );
 
       await Promise.all([
         ...Object.keys(settings).map((delKey) => this.cacheManager.del(delKey)),
-        ...Object.keys(settingsKey).map((delKey) =>
-          this.cacheManager.del(delKey)
-        ),
+        ...sharedCacheKey?.map((delKey) => this.cacheManager.del(delKey)),
         this.cacheManager.del(token),
-        this.cacheManager.del(key),
       ]);
     }
 
