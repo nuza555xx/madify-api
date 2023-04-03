@@ -1,4 +1,4 @@
-import { connection } from '../helper/mongodb.connection';
+import { connectionMongo } from '../helper/mongodb.connection';
 
 (async () => {
   try {
@@ -11,7 +11,7 @@ import { connection } from '../helper/mongodb.connection';
     const dbName = args['dbName'] || 'test';
     const url = args['url'] || `mongodb://localhost:27017/${dbName}`;
     const collectionViewName = 'vehicles-view';
-    const conn = await connection(url);
+    const conn = await connectionMongo(url);
     const db = conn.db(dbName);
     const collection = db.collection(collectionViewName);
 

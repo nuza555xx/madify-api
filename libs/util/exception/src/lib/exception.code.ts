@@ -33,7 +33,7 @@ export const Errors = {
   RATE_LIMIT_REQUEST: {
     statusCode: 429,
     code: '1006',
-    message: `API rate limit exceeded `,
+    message: `API rate limit exceeded. Please waiting.`,
   },
   INVALID_EMAIL_OR_PASSWORD: {
     statusCode: 400,

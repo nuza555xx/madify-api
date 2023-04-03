@@ -107,7 +107,11 @@ export class Account extends BaseSchema {
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account)
-  .index({ email: 1 })
-  .index({ 'authentications.socialId': 1 })
-  .index({ 'credentials.accessToken': 1 })
-  .index({ 'credentials.refreshToken': 1 });
+  .index({ email: 1 }, { background: true })
+  .index({ 'authentications.socialId': 1 }, { background: true })
+  .index({ 'credentials.accessToken': 1 }, { background: true })
+  .index({ 'credentials.refreshToken': 1 }, { background: true })
+  .index({ 'credentials.accessTokenExpiration': 1 }, { background: true })
+  .index({ 'credentials.refreshExpiration': 1 }, { background: true })
+  .index({ 'credentials.platform': 1 }, { background: true })
+  .index({ 'credentials.uuid': 1 }, { background: true });

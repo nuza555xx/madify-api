@@ -17,11 +17,13 @@ import {
 import { MadifyPagination } from '@madify-api/common';
 import { QueryOptions, Types } from 'mongoose';
 import { MadifyException } from '@madify-api/exception';
+import { STORAGE_PROVIDE, StorageService } from '@madify-api/gcp';
 
 @Injectable()
 export class VehicleImpl implements VehicleService {
   constructor(
-    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository
+    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
+    @Inject(STORAGE_PROVIDE) private readonly storage: StorageService
   ) {}
 
   async createVehicle(
@@ -49,12 +51,23 @@ export class VehicleImpl implements VehicleService {
     };
 
     const vehicles = await this.repository.findVehicles(
-      { ...query, accountId, visibility: EntityVisibility.Publish },
+      {
+        ...query,
+        accountId,
+        //  visibility: EntityVisibility.Publish
+      },
       queryOptions
     );
 
+    const vehiclesResponse = await Promise.all(
+      vehicles.map(async (e) => {
+        const image = await this.storage.generateSignedUrl(e.imageKey);
+        return PayloadResponse.toVehicleResponse(e, { image });
+      })
+    );
+
     return ResponseDto.ok<IResponseVehicle[]>({
-      payload: vehicles.map((e) => PayloadResponse.toVehicleResponse(e)),
+      payload: vehiclesResponse,
       meta: Meta.fromDocuments(vehicles, page, limit),
     });
   }

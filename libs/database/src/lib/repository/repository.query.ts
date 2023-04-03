@@ -52,11 +52,9 @@ export class PrepareQuery {
     if (query?.insureId)
       filters.insureId = new Types.ObjectId(String(query.insureId));
 
-    if (query?.brandId)
-      filters.brandId = new Types.ObjectId(String(query.brandId));
+    if (query?.brand) filters.brand = query.brand;
 
-    if (query?.generationId)
-      filters.generationId = new Types.ObjectId(String(query.generationId));
+    if (query?.model) filters.model = query.model;
 
     if (query?.expiredYear) filters.expiredYear = query.expiredYear;
 

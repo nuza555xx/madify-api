@@ -26,7 +26,6 @@ type TokenPayload = {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  private logger = new MadifyLogger(AuthGuard.name);
   private jwtToken = this.configService.get<IJwtConfig>(ConfigKey.JWT);
 
   constructor(
