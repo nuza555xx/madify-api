@@ -31,4 +31,34 @@ export type VehicleQuery = {
   registrationCountry?: string;
   insureRangeAmount?: number;
   visibility?: EntityVisibility;
+  search?: string;
+};
+
+export type VehicleBrandQuery = {
+  id?: string;
+  name?: {
+    th?: string;
+    en?: string;
+  };
+  slug?: string;
+};
+
+export type VehicleModelQuery = {
+  id?: string;
+  name?: {
+    th?: string;
+    en?: string;
+  };
+  brand?: string;
+  slug?: string;
+};
+
+export type ProvinceQuery = {
+  id?: string;
+  name?: {
+    th?: string;
+    en?: string;
+  };
+  brand?: string;
+  slug?: string;
 };

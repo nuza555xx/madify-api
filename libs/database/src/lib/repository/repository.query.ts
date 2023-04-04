@@ -1,7 +1,16 @@
 import { FilterQuery, Types } from 'mongoose';
 import { Account } from '../schema/account.schema';
-import { AccountQuery, VehicleQuery } from './repository.interface';
+import {
+  AccountQuery,
+  ProvinceQuery,
+  VehicleBrandQuery,
+  VehicleModelQuery,
+  VehicleQuery,
+} from './repository.interface';
 import { Vehicle } from '../schema/vehicle.schema';
+import { VehicleBrand } from '../schema/vehicle.brand.schema';
+import { VehicleModel } from '../schema/vehicle.model.schema';
+import { Province } from '../schema/province.model.schema';
 
 export class PrepareQuery {
   findAccountFilters(query: AccountQuery): FilterQuery<Account> {
@@ -42,6 +51,9 @@ export class PrepareQuery {
 
   findVehicleFilters(query: VehicleQuery): FilterQuery<Vehicle> {
     const filters: FilterQuery<Vehicle> = {};
+
+    if (query?.search) filters.$text = { $search: query.search };
+
     if (query?.id) filters._id = new Types.ObjectId(String(query.id));
 
     if (query?.visibility) filters.visibility = query.visibility;
@@ -69,6 +81,50 @@ export class PrepareQuery {
 
     if (query?.insureRangeAmount)
       filters.insureRangeAmount = query.insureRangeAmount;
+
+    return filters;
+  }
+
+  findVehicleBrandFilters(query: VehicleBrandQuery): FilterQuery<VehicleBrand> {
+    const filters: FilterQuery<VehicleBrand> = {};
+
+    if (query?.id) filters._id = new Types.ObjectId(String(query.id));
+
+    if (query?.name?.th) filters['name.th'] = query.name.th;
+
+    if (query?.name?.en) filters['name.en'] = query.name.en;
+
+    if (query?.slug) filters.slug = query.slug;
+
+    return filters;
+  }
+
+  findVehicleModelFilters(query: VehicleModelQuery): FilterQuery<VehicleModel> {
+    const filters: FilterQuery<VehicleModel> = {};
+
+    if (query?.id) filters._id = new Types.ObjectId(String(query.id));
+
+    if (query?.name?.th) filters['name.th'] = query.name.th;
+
+    if (query?.name?.en) filters['name.en'] = query.name.en;
+
+    if (query?.slug) filters.slug = query.slug;
+
+    if (query?.brand) filters.brand = query.brand;
+
+    return filters;
+  }
+
+  findProvinceFilters(query: ProvinceQuery): FilterQuery<Province> {
+    const filters: FilterQuery<Province> = {};
+
+    if (query?.id) filters._id = new Types.ObjectId(String(query.id));
+
+    if (query?.name?.th) filters['name.th'] = query.name.th;
+
+    if (query?.name?.en) filters['name.en'] = query.name.en;
+
+    if (query?.slug) filters.slug = query.slug;
 
     return filters;
   }

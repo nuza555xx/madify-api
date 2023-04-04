@@ -20,20 +20,19 @@ export class GetSearchVehicleQuery {
   })
   @IsOptional()
   @IsString()
-  @Max(255)
   search?: string;
 
   @ApiProperty({
-    name: 'page',
-    example: 1,
-    description: 'This is a required property',
-    required: true,
+    name: 'skip',
+    example: '',
+    description: 'This is a optional property',
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @Type(() => Number)
-  page: number;
+  skip: number;
 
   @ApiProperty({
     name: 'limit',

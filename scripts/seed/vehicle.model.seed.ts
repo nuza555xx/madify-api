@@ -29,37 +29,64 @@ import { inspect } from 'util';
     )
   );
 
+  const modelSchema = model(
+    'VehicleModel',
+    new Schema(
+      {
+        slug: SchemaTypes.String,
+        brand: SchemaTypes.String,
+        name: {
+          th: SchemaTypes.String,
+          en: SchemaTypes.String,
+        },
+      },
+      { timestamps: true }
+    )
+  );
+
   const json = readFileSync(`${process.cwd()}/scripts/asset/new-vehicle.json`, {
     encoding: 'utf8',
   });
   const vehicles = JSON.parse(json);
 
-  const brands = sortBy<any>(
+  const models = sortBy<any>(
     uniqBy(
       [...vehicles.map((e) => ({ brand: e.brand, model: e.model }))],
       'model'
     ),
     ['brand']
   );
-  console.log(`Inserting brand is successfully`);
 
-  await brandSchema
-    .insertMany(
-      brands.map((e) => {
+  const brandData = await brandSchema.find().exec();
+
+  console.log(`Inserting model is successfully`);
+
+  if (brandData.length) {
+    const prepareModel = await Promise.all(
+      models.map((e) => {
+        const brand = brandData.find((brand) => brand.name?.en === e.brand);
+        if (!brand) {
+          console.error(`Not found ${inspect(brand)}`);
+          return;
+        }
+
         return {
           name: {
-            en: e,
+            en: e.model,
             th: null,
           },
-          slug: e.toLowerCase().trim().replace(/\s/g, '_'),
+          brand: brand?.slug,
+          slug: e.model.toLowerCase().trim().replace(/\s/g, '_'),
         };
-      }),
-      { ordered: true }
-    )
-    .then(() => {
-      console.log(`Insert brand is successfully`);
-    })
-    .catch(console.error);
+      })
+    );
 
+    await modelSchema
+      .insertMany(prepareModel, { ordered: false })
+      .then(() => {
+        console.log(`Insert model is successfully`);
+      })
+      .catch();
+  }
   process.exit(1);
 })();

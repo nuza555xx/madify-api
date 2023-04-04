@@ -3,18 +3,15 @@ import { BaseSchema, Name } from './base.schema';
 import { SchemaTypes } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class VehicleBrand extends BaseSchema {
+export class Province extends BaseSchema {
   @Prop({ type: Name, required: true })
   name: Name;
 
   @Prop({ type: SchemaTypes.String, required: true })
   slug: string;
-
-  @Prop({ type: SchemaTypes.String })
-  imageKey?: string;
 }
 
-export const VehicleBrandSchema = SchemaFactory.createForClass(VehicleBrand)
+export const ProvinceSchema = SchemaFactory.createForClass(Province)
   .index({ name: 1 }, { background: true })
   .index({ 'name.th': 1 }, { background: true })
   .index({ 'name.en': 1 }, { background: true })

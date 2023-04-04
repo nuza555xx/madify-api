@@ -35,20 +35,20 @@ export interface IStorageConfig {
 }
 
 export class Meta {
-  page?: number;
-  limit?: number;
+  previous?: number;
+  next?: number;
   resultCount: number;
   resultTotal?: number;
 
   static fromDocuments = (
     documents: any[],
-    page?: number,
+    skip?: number,
     limit?: number,
     resultTotal?: number
   ): Meta => {
     return {
-      page,
-      limit,
+      previous: skip,
+      next: (skip ?? 0) + limit,
       resultCount: documents.length,
       resultTotal,
     };

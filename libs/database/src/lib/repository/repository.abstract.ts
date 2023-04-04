@@ -1,4 +1,10 @@
-import { AccountQuery, VehicleQuery } from './repository.interface';
+import {
+  AccountQuery,
+  ProvinceQuery,
+  VehicleBrandQuery,
+  VehicleModelQuery,
+  VehicleQuery,
+} from './repository.interface';
 import {
   AnyKeys,
   QueryOptions,
@@ -9,12 +15,27 @@ import {
 } from 'mongoose';
 import { Account } from '../schema/account.schema';
 import { Vehicle } from '../schema/vehicle.schema';
+import { VehicleBrand } from '../schema/vehicle.brand.schema';
+import { VehicleModel } from '../schema/vehicle.model.schema';
+import { Province } from '../schema/province.model.schema';
 
 export type ResultAccount = Account & {
   _id: Types.ObjectId;
 };
 
 export type ResultVehicle = Vehicle & {
+  _id: Types.ObjectId;
+};
+
+export type ResultVehicleBrand = VehicleBrand & {
+  _id: Types.ObjectId;
+};
+
+export type ResultVehicleModel = VehicleModel & {
+  _id: Types.ObjectId;
+};
+
+export type ResultProvince = Province & {
   _id: Types.ObjectId;
 };
 
@@ -53,4 +74,34 @@ export abstract class IRepository {
     vehicle: VehicleQuery,
     queryOptions?: QueryOptions
   ): Promise<number>;
+
+  abstract findVehicleBrand(
+    vehicleBrand: VehicleBrandQuery,
+    queryOptions?: QueryOptions
+  ): Promise<ResultVehicleBrand>;
+
+  abstract findVehicleBrands(
+    vehicleBrand: VehicleBrandQuery,
+    queryOptions?: QueryOptions
+  ): Promise<ResultVehicleBrand[]>;
+
+  abstract findVehicleModel(
+    vehicleModel: VehicleModelQuery,
+    queryOptions?: QueryOptions
+  ): Promise<ResultVehicleModel>;
+
+  abstract findVehicleModels(
+    vehicleModel: VehicleModelQuery,
+    queryOptions?: QueryOptions
+  ): Promise<ResultVehicleModel[]>;
+
+  abstract findProvince(
+    province: ProvinceQuery,
+    queryOptions?: QueryOptions
+  ): Promise<ResultProvince>;
+
+  abstract findProvinces(
+    province: ProvinceQuery,
+    queryOptions?: QueryOptions
+  ): Promise<ResultProvince[]>;
 }
