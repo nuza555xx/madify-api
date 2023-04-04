@@ -40,11 +40,11 @@ export class VehicleImpl implements VehicleService {
     return PayloadResponse.toVehicleResponse(vehicle);
   }
 
-  async listVehicle(
-    { page, limit, ...query }: IGetVehicleList,
-    accountId?: string
-  ): Promise<ResponseDto<IResponseVehicle[]>> {
-    const skip = MadifyPagination.skip(page, limit);
+  async listVehicle({
+    skip = 0,
+    limit,
+    ...query
+  }: IGetVehicleList): Promise<ResponseDto<IResponseVehicle[]>> {
     const queryOptions: QueryOptions = {
       skip: skip,
       limit: limit,
@@ -53,22 +53,38 @@ export class VehicleImpl implements VehicleService {
     const vehicles = await this.repository.findVehicles(
       {
         ...query,
-        accountId,
         //  visibility: EntityVisibility.Publish
       },
       queryOptions
     );
 
     const vehiclesResponse = await Promise.all(
-      vehicles.map(async (e) => {
-        const image = await this.storage.generateSignedUrl(e.imageKey);
-        return PayloadResponse.toVehicleResponse(e, { image });
+      vehicles.map(async (vehicle) => {
+        const [image, brand, model, province] = await Promise.all([
+          this.storage.generateSignedUrl(vehicle.imageKey),
+          this.repository.findVehicleBrand({
+            slug: vehicle.brand,
+          }),
+          this.repository.findVehicleModel({
+            slug: vehicle.model,
+          }),
+          this.repository.findProvince({
+            slug: vehicle.registrationProvince,
+          }),
+        ]);
+
+        return PayloadResponse.toVehicleResponse(vehicle, {
+          vehicleImage: image,
+          brand: brand.name,
+          model: model.name,
+          registrationProvince: province.name,
+        });
       })
     );
 
     return ResponseDto.ok<IResponseVehicle[]>({
       payload: vehiclesResponse,
-      meta: Meta.fromDocuments(vehicles, page, limit),
+      meta: Meta.fromDocuments(vehicles, skip, limit),
     });
   }
 }

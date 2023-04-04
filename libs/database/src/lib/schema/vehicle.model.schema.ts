@@ -1,15 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema } from './base.schema';
+import { BaseSchema, Name } from './base.schema';
 import { SchemaTypes } from 'mongoose';
 
-@Schema({ id: false, _id: false, versionKey: false })
-class Name {
-  @Prop({ type: SchemaTypes.String })
-  th: string;
-
-  @Prop({ type: SchemaTypes.String })
-  en: string;
-}
 @Schema({ timestamps: true })
 export class VehicleModel extends BaseSchema {
   @Prop({ type: Name, required: true })

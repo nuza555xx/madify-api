@@ -3,11 +3,9 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  HttpStatus,
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { MadifyError, MadifyException } from './exception';
-import { MongooseError } from 'mongoose';
+import { MadifyException } from './exception';
 
 @Catch(MadifyException)
 export class MadifyExceptionFilter implements ExceptionFilter {
