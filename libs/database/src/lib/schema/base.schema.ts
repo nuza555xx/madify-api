@@ -13,3 +13,12 @@ export class BaseSchema extends Document {
   @Prop({ type: SchemaTypes.String, default: EntityVisibility.Publish })
   visibility: EntityVisibility;
 }
+
+@Schema({ id: false, _id: false, versionKey: false })
+export class Name {
+  @Prop({ type: SchemaTypes.String })
+  th: string;
+
+  @Prop({ type: SchemaTypes.String })
+  en: string;
+}

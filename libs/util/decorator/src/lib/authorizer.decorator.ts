@@ -64,10 +64,10 @@ export const Auth = createParamDecorator(
   }
 );
 
-export const MadifyCached = (cacheConfig: ICacheKey) => {
+export const MadifySharedCached = (cacheConfig: ICacheKey) => {
   return applyDecorators(
     CacheKey(cacheConfig.name),
-    CacheTTL(cacheConfig.ttl),
+    CacheTTL(cacheConfig.ttlShared),
     UseInterceptors(HttpCacheSharedWithQueryInterceptor)
   );
 };

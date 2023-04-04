@@ -28,9 +28,6 @@ export class Vehicle extends BaseSchema {
   @Prop({ type: String, index: true, required: true })
   registrationProvince: string;
 
-  @Prop({ type: String, index: true })
-  registrationCountry?: string;
-
   @Prop({ type: SchemaTypes.String })
   imageKey?: string;
 }
@@ -38,8 +35,12 @@ export class Vehicle extends BaseSchema {
 export const VehicleSchema = SchemaFactory.createForClass(Vehicle)
   .index({ accountId: 1 }, { background: true })
   .index({ insureId: 1 }, { background: true })
-  .index({ brand: 'text' }, { background: true })
-  .index({ model: 'text' }, { background: true })
-  .index({ vehicleRegistration: 'text' }, { background: true })
-  .index({ vehicleRegistration: 'text' }, { background: true })
-  .index({ registrationCountry: 'text' }, { background: true });
+  .index(
+    {
+      brand: 'text',
+      model: 'text',
+      vehicleRegistration: 'text',
+      registrationProvince: 'text',
+    },
+    { background: true }
+  );

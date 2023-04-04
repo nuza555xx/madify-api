@@ -1,5 +1,5 @@
 export interface IGetVehicleList {
   search?: string;
-  page: number;
+  skip: number;
   limit: number;
 }

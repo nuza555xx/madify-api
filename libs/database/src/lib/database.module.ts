@@ -13,6 +13,7 @@ import {
   VehicleModel,
   VehicleModelSchema,
 } from './schema/vehicle.model.schema';
+import { Province, ProvinceSchema } from './schema/province.model.schema';
 
 const modelDefinitions: ModelDefinition[] = [
   {
@@ -34,6 +35,10 @@ const modelDefinitions: ModelDefinition[] = [
   {
     name: Otp.name,
     schema: OtpSchema,
+  },
+  {
+    name: Province.name,
+    schema: ProvinceSchema,
   },
 ];
 
