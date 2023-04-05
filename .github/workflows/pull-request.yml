@@ -11,8 +11,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
       - uses: actions/cache@v3
         id: cache
         with:
@@ -29,15 +29,17 @@ jobs:
       fail-fast: false
       matrix:
         app:
-          - users
+          - authentication
+          - vehicle
+          - user
     name: Build ${{ matrix.app }} service
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
       - uses: actions/cache@v3
         id: cache
         with:
@@ -54,15 +56,17 @@ jobs:
       fail-fast: false
       matrix:
         app:
-          - users
+          - authentication
+          - vehicle
+          - user
     name: Test ${{ matrix.app }} service
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
       - uses: actions/cache@v3
         id: cache
         with:
@@ -72,4 +76,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test Project
-        run: npm run build ${{ matrix.app }}
+        run: npm run test ${{ matrix.app }}

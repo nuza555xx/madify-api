@@ -1,24 +1,21 @@
 import {
+  EntityVisibility,
   ICreateVehicle,
   IGetVehicleList,
+  IRepository,
   IResponseProfile,
   IResponseVehicle,
   IUpdateProfile,
   Meta,
-  ResponseDto,
-} from '@madify-api/interface';
-import {
-  REPOSITORY_PROVIDE,
-  IRepository,
   PayloadResponse,
-} from '@madify-api/database';
-import { Inject, Injectable } from '@nestjs/common';
-import { UserService } from './user.abstract';
-import { MadifyException } from '@madify-api/exception';
-import { QueryOptions, Types } from 'mongoose';
-import { MadifyPagination } from '@madify-api/common';
-import { EntityVisibility } from '@madify-api/enum';
-import { STORAGE_PROVIDE, StorageService } from '@madify-api/gcp';
+  REPOSITORY_PROVIDE,
+  ResponseDto,
+} from "@madify-api/database";
+import { MadifyException } from "@madify-api/utils/exception";
+import { STORAGE_PROVIDE, StorageService } from "@madify-api/utils/provider";
+import { Inject, Injectable } from "@nestjs/common";
+import { QueryOptions, Types } from "mongoose";
+import { UserService } from "./user.abstract";
 
 @Injectable()
 export class UserImpl implements UserService {
@@ -30,7 +27,7 @@ export class UserImpl implements UserService {
   async getProfile(accountId: string): Promise<IResponseProfile> {
     const account = await this.repository.findAccount({ id: accountId });
     if (!account) {
-      throw new MadifyException('NOT_FOUND_DATA');
+      throw new MadifyException("NOT_FOUND_DATA");
     }
 
     return {
@@ -46,7 +43,7 @@ export class UserImpl implements UserService {
   ): Promise<IResponseProfile> {
     const account = await this.repository.findAccount({ id: accountId });
     if (!account) {
-      throw new MadifyException('NOT_FOUND_DATA');
+      throw new MadifyException("NOT_FOUND_DATA");
     }
 
     account.set(body);
@@ -71,7 +68,7 @@ export class UserImpl implements UserService {
         body.image
       );
 
-    if (!vehicle) throw new MadifyException('SOMETHING_WRONG');
+    if (!vehicle) throw new MadifyException("SOMETHING_WRONG");
 
     const image = body.image
       ? await this.storage.generateSignedUrl(vehicle.imageKey)

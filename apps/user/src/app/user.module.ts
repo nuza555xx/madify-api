@@ -1,23 +1,26 @@
-import { MadifyConfigModule } from '@madify-api/config';
-import { MadifyDatabaseModule } from '@madify-api/database';
-import { MadifyJwtModule } from '@madify-api/jwt';
-import { MadifyCacheModule, MadifyThrottlerModule } from '@madify-api/module';
-import { Module } from '@nestjs/common';
-import { UserController } from './user.controller';
-import { UserImpl } from './service/user.service';
-import { MadifyInterceptorsModule } from '@madify-api/interceptor';
-import { UserService } from './service/user.abstract';
-import { MadifyGCPModule } from '@madify-api/gcp';
+import { MadifyDatabaseModule } from "@madify-api/database";
+import { MadifyConfigModule } from "@madify-api/utils/config";
+import { MadifyUtilsInterceptorModule } from "@madify-api/utils/interceptor";
+import {
+  MadifyCacheModule,
+  MadifyJwtConfigModule,
+  MadifyThrottlerModule,
+} from "@madify-api/utils/module";
+import { MadifyUtilsProviderModule } from "@madify-api/utils/provider";
+import { Module } from "@nestjs/common";
+import { UserService } from "./service/user.abstract";
+import { UserImpl } from "./service/user.service";
+import { UserController } from "./user.controller";
 
 @Module({
   imports: [
     MadifyConfigModule,
     MadifyDatabaseModule,
-    MadifyJwtModule,
+    MadifyJwtConfigModule,
     MadifyThrottlerModule,
     MadifyCacheModule,
-    MadifyInterceptorsModule,
-    MadifyGCPModule,
+    MadifyUtilsInterceptorModule,
+    MadifyUtilsProviderModule,
   ],
   controllers: [UserController],
   providers: [

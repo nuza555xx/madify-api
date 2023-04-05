@@ -1,11 +1,11 @@
-import { Account } from '@madify-api/database';
 import {
+  Account,
+  ILoginWithEmail,
+  IRefreshToken,
+  IRegisterFirebase,
   IRegisterWithEmail,
   IResponseLogin,
-  ILoginWithEmail,
-  IRegisterFirebase,
-  IRefreshToken,
-} from '@madify-api/interface';
+} from "@madify-api/database";
 
 export abstract class AuthenticationService {
   abstract registerWithEmail(dto: IRegisterWithEmail): Promise<IResponseLogin>;
