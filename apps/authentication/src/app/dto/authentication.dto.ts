@@ -1,5 +1,5 @@
-import { AcceptPlatform, Objective } from "@madify-api/database";
-import { ApiProperty } from "@nestjs/swagger";
+import { AcceptPlatform, Objective } from '@madify-api/database';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsEnum,
@@ -7,22 +7,22 @@ import {
   IsMobilePhone,
   IsNotEmpty,
   IsString,
-} from "class-validator";
+} from 'class-validator';
 
 export class RegisterWithEmailDto {
   @ApiProperty({
-    name: "email",
-    example: "test@example.com",
-    description: "This is a required property",
+    name: 'email',
+    example: 'test@example.com',
+    description: 'This is a required property',
     required: true,
   })
   @IsEmail()
   email: string;
 
   @ApiProperty({
-    name: "password",
-    example: "12345678",
-    description: "This is a required property",
+    name: 'password',
+    example: '12345678',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -30,9 +30,9 @@ export class RegisterWithEmailDto {
   password: string;
 
   @ApiProperty({
-    name: "displayName",
-    example: "test@example.com",
-    description: "This is a required property",
+    name: 'displayName',
+    example: 'test@example.com',
+    description: 'This is a required property',
 
     required: true,
   })
@@ -43,18 +43,18 @@ export class RegisterWithEmailDto {
 
 export class LoginWithEmailDto {
   @ApiProperty({
-    name: "email",
-    example: "test@example.com",
-    description: "This is a required property",
+    name: 'email',
+    example: 'test@example.com',
+    description: 'This is a required property',
     required: true,
   })
   @IsEmail()
   email: string;
 
   @ApiProperty({
-    name: "password",
-    example: "12345678",
-    description: "This is a required property",
+    name: 'password',
+    example: '12345678',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -64,9 +64,9 @@ export class LoginWithEmailDto {
 
 export class RequestOTPDto {
   @ApiProperty({
-    name: "countryCode",
-    example: "+66",
-    description: "This is a required property",
+    name: 'countryCode',
+    example: '+66',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -74,9 +74,9 @@ export class RequestOTPDto {
   countryCode: string;
 
   @ApiProperty({
-    name: "tel",
-    example: "+66999999999",
-    description: "This is a required property",
+    name: 'tel',
+    example: '+66999999999',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -84,9 +84,9 @@ export class RequestOTPDto {
   tel: string;
 
   @ApiProperty({
-    name: "objective",
+    name: 'objective',
     example: Objective.Verify,
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
     enum: Objective,
   })
@@ -97,9 +97,9 @@ export class RequestOTPDto {
 
 export class VerifyOTPDto {
   @ApiProperty({
-    name: "accessToken",
-    example: "ACCESS_TOKEN",
-    description: "This is a required property",
+    name: 'accessToken',
+    example: 'ACCESS_TOKEN',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -108,9 +108,9 @@ export class VerifyOTPDto {
   accessToken: string;
 
   @ApiProperty({
-    name: "refCode",
-    example: "1234",
-    description: "This is a required property",
+    name: 'refCode',
+    example: '1234',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -120,9 +120,9 @@ export class VerifyOTPDto {
 
 export class RegisterFirebaseDto {
   @ApiProperty({
-    name: "firebaseToken",
-    example: "",
-    description: "This is a required property",
+    name: 'firebaseToken',
+    example: '',
+    description: 'This is a required property',
     required: true,
   })
   @IsString()
@@ -130,9 +130,9 @@ export class RegisterFirebaseDto {
   firebaseToken: string;
 
   @ApiProperty({
-    name: "uuid",
-    example: "",
-    description: "This is a required property",
+    name: 'uuid',
+    example: '',
+    description: 'This is a required property',
     required: true,
   })
   @IsString()
@@ -140,9 +140,9 @@ export class RegisterFirebaseDto {
   uuid: string;
 
   @ApiProperty({
-    name: "platform",
+    name: 'platform',
     example: AcceptPlatform.Web,
-    description: "This is a required property",
+    description: 'This is a required property',
     enum: AcceptPlatform,
     required: true,
   })
@@ -154,9 +154,9 @@ export class RegisterFirebaseDto {
 
 export class ForgotPasswordDto extends RequestOTPDto {
   @ApiProperty({
-    name: "objective",
+    name: 'objective',
     example: Objective.ForgotPassword,
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
     enum: Objective,
   })

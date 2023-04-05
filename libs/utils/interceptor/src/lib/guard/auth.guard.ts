@@ -3,18 +3,18 @@ import {
   EntityVisibility,
   IRepository,
   REPOSITORY_PROVIDE,
-} from "@madify-api/database";
-import { ConfigKey, IJwtConfig } from "@madify-api/utils/config";
-import { MadifyException } from "@madify-api/utils/exception";
+} from '@madify-api/database';
+import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
+import { MadifyException } from '@madify-api/utils/exception';
 import {
   CanActivate,
   ExecutionContext,
   Inject,
   Injectable,
-} from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { JwtService } from "@nestjs/jwt";
-import { FastifyRequest } from "fastify";
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { FastifyRequest } from 'fastify';
 
 type AuthRequest = FastifyRequest & {
   $account: Account;
@@ -37,14 +37,14 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthRequest>();
-    const [type, token] = request.headers.authorization?.split(" ") ?? [];
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
 
-    if (type !== "Bearer" || !token)
-      throw new MadifyException("MISSING_AUTHORIZATION_HEADERS");
+    if (type !== 'Bearer' || !token)
+      throw new MadifyException('MISSING_AUTHORIZATION_HEADERS');
 
     const payload = this.verifyToken(token);
 
-    if (!payload) throw new MadifyException("INVALID_ACCESS_TOKEN");
+    if (!payload) throw new MadifyException('INVALID_ACCESS_TOKEN');
 
     const id = payload.id;
     const account = await this.repository.findAccount({
@@ -56,7 +56,7 @@ export class AuthGuard implements CanActivate {
       },
     });
 
-    if (!account) throw new MadifyException("INVALID_ACCESS_TOKEN");
+    if (!account) throw new MadifyException('INVALID_ACCESS_TOKEN');
 
     request.$account = account;
     return true;

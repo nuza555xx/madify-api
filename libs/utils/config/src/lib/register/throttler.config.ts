@@ -1,6 +1,6 @@
-import { registerAs } from "@nestjs/config";
-import { ConfigKey } from "../config.enum";
-import { IThrottlerConfig } from "../config.interface";
+import { registerAs } from '@nestjs/config';
+import { ConfigKey } from '../config.enum';
+import { IThrottlerConfig } from '../config.interface';
 
 export const throttlerConfig = registerAs(
   ConfigKey.THROTTLER,

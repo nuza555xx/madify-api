@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { SchemaTypes, Types } from "mongoose";
-import { BaseSchema } from "./base.schema";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { SchemaTypes, Types } from 'mongoose';
+import { BaseSchema } from './base.schema';
 
 @Schema({ timestamps: true })
 export class Vehicle extends BaseSchema {
@@ -37,10 +37,10 @@ export const VehicleSchema = SchemaFactory.createForClass(Vehicle)
   .index({ insureId: 1 }, { background: true })
   .index(
     {
-      brand: "text",
-      model: "text",
-      vehicleRegistration: "text",
-      registrationProvince: "text",
+      brand: 'text',
+      model: 'text',
+      vehicleRegistration: 'text',
+      registrationProvince: 'text',
     },
     { background: true }
   );

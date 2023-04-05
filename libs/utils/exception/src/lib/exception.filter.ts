@@ -1,7 +1,7 @@
-import { MadifyLogger } from "@madify-api/utils/common";
-import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common";
-import { FastifyReply } from "fastify";
-import { MadifyException } from "./exception";
+import { MadifyLogger } from '@madify-api/utils/common';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
+import { MadifyException } from './exception';
 
 @Catch(MadifyException)
 export class MadifyExceptionFilter implements ExceptionFilter {

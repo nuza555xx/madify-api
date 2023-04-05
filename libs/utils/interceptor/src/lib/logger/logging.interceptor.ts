@@ -1,4 +1,4 @@
-import { MadifyLogger } from "@madify-api/utils/common";
+import { MadifyLogger } from '@madify-api/utils/common';
 import {
   CallHandler,
   ExecutionContext,
@@ -6,9 +6,9 @@ import {
   HttpStatus,
   Injectable,
   NestInterceptor,
-} from "@nestjs/common";
-import { FastifyReply, FastifyRequest } from "fastify";
-import { Observable, tap } from "rxjs";
+} from '@nestjs/common';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class MadifyRestLogger implements NestInterceptor {

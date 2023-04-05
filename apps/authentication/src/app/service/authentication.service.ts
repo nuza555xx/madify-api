@@ -8,15 +8,15 @@ import {
   IRepository,
   IResponseLogin,
   REPOSITORY_PROVIDE,
-} from "@madify-api/database";
-import { MadifyHash } from "@madify-api/utils/common";
-import { ConfigKey, IJwtConfig } from "@madify-api/utils/config";
-import { MadifyException } from "@madify-api/utils/exception";
-import { Inject, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { JwtService } from "@nestjs/jwt";
-import { DateTime } from "luxon";
-import { AuthenticationService } from "./authentication.abstract";
+} from '@madify-api/database';
+import { MadifyHash } from '@madify-api/utils/common';
+import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
+import { MadifyException } from '@madify-api/utils/exception';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { DateTime } from 'luxon';
+import { AuthenticationService } from './authentication.abstract';
 
 @Injectable()
 export class AuthenticationImpl implements AuthenticationService {
@@ -63,15 +63,15 @@ export class AuthenticationImpl implements AuthenticationService {
 
   async registerWithEmail(dto: IRegisterWithEmail): Promise<IResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
-      throw new MadifyException("MISSING_METADATA_HEADERS");
+      throw new MadifyException('MISSING_METADATA_HEADERS');
 
     dto.password = await MadifyHash.hash(dto.password);
 
     const isExists = await this.repository.findAccount(dto);
-    if (isExists) throw new MadifyException("DUPLICATE_EMAIL");
+    if (isExists) throw new MadifyException('DUPLICATE_EMAIL');
 
     const account = await this.repository.createAccount(dto);
-    if (!account) throw new MadifyException("NOT_FOUND_DATA");
+    if (!account) throw new MadifyException('NOT_FOUND_DATA');
 
     const token = await this.generateAllToken(account);
 
@@ -90,16 +90,16 @@ export class AuthenticationImpl implements AuthenticationService {
 
   async loginWithEmail(dto: ILoginWithEmail): Promise<IResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
-      throw new MadifyException("MISSING_METADATA_HEADERS");
+      throw new MadifyException('MISSING_METADATA_HEADERS');
 
     const account = await this.repository.findAccount(dto);
     if (!account) {
-      throw new MadifyException("NOT_FOUND_DATA");
+      throw new MadifyException('NOT_FOUND_DATA');
     }
 
     const isMatched = await MadifyHash.compare(dto.password, account.password);
     if (!isMatched) {
-      throw new MadifyException("NOT_MATCH_PASSWORD");
+      throw new MadifyException('NOT_MATCH_PASSWORD');
     }
 
     const token = await this.generateAllToken(account);
@@ -118,7 +118,7 @@ export class AuthenticationImpl implements AuthenticationService {
         },
         {
           $set: {
-            "credentials.$": {
+            'credentials.$': {
               platform: dto.platform,
               uuid: dto.uuid,
               ...token,
@@ -152,7 +152,7 @@ export class AuthenticationImpl implements AuthenticationService {
     if (device) device.firebaseToken = firebaseToken;
     else (account.devices ??= []).push({ uuid, platform, firebaseToken });
 
-    account.markModified("devices");
+    account.markModified('devices');
     await account.save();
   }
 
@@ -173,7 +173,7 @@ export class AuthenticationImpl implements AuthenticationService {
 
   async refreshToken(dto: IRefreshToken): Promise<IResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
-      throw new MadifyException("MISSING_METADATA_HEADERS");
+      throw new MadifyException('MISSING_METADATA_HEADERS');
 
     const { secret } = this.configService.get<IJwtConfig>(ConfigKey.JWT);
 
@@ -186,16 +186,16 @@ export class AuthenticationImpl implements AuthenticationService {
       },
     });
 
-    if (!account) throw new MadifyException("NOT_FOUND_DATA");
+    if (!account) throw new MadifyException('NOT_FOUND_DATA');
 
     const credential = account.credentials.find(
       ({ uuid, platform }) => dto.uuid === uuid && dto.platform === platform
     );
 
-    if (!credential) throw new MadifyException("FORBIDDEN");
+    if (!credential) throw new MadifyException('FORBIDDEN');
 
     if (new Date(credential.refreshTokenExpiration) < new Date())
-      throw new MadifyException("INVALID_REFRESH_TOKEN");
+      throw new MadifyException('INVALID_REFRESH_TOKEN');
 
     const token = await this.generateAllToken(account);
 
@@ -209,7 +209,7 @@ export class AuthenticationImpl implements AuthenticationService {
       },
       {
         $set: {
-          "credentials.$": {
+          'credentials.$': {
             platform: dto.platform,
             uuid: dto.uuid,
             ...token,

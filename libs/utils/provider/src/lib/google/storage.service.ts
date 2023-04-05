@@ -1,8 +1,8 @@
-import { Bucket, GetSignedUrlConfig, Storage } from "@google-cloud/storage";
-import { ConfigKey, IStorageConfig } from "@madify-api/utils/config";
-import { Injectable, OnModuleInit } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import mimeTypes from "mimetypes";
+import { Bucket, GetSignedUrlConfig, Storage } from '@google-cloud/storage';
+import { ConfigKey, IStorageConfig } from '@madify-api/utils/config';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import mimeTypes from 'mimetypes';
 
 @Injectable()
 export class StorageService implements OnModuleInit {
@@ -36,9 +36,9 @@ export class StorageService implements OnModuleInit {
   private createFileBufferFromBase64(base64: string): Buffer {
     const base64EncodedImageString = base64.replace(
       /^data:image\/\w+;base64,/,
-      ""
+      ''
     );
-    return Buffer.from(base64EncodedImageString, "base64");
+    return Buffer.from(base64EncodedImageString, 'base64');
   }
 
   async uploadFile(filePath: string, base64: string): Promise<string> {
@@ -65,8 +65,8 @@ export class StorageService implements OnModuleInit {
     if (!filePath) return;
 
     const options: GetSignedUrlConfig = {
-      version: "v4",
-      action: "read",
+      version: 'v4',
+      action: 'read',
       expires: Date.now() + this.config.expired,
     };
 

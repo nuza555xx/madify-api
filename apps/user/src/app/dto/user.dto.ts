@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsMongoId,
@@ -10,14 +10,14 @@ import {
   IsString,
   Max,
   Min,
-} from "class-validator";
-import { Types } from "mongoose";
+} from 'class-validator';
+import { Types } from 'mongoose';
 
 export class GetProfileParams {
   @ApiProperty({
-    name: "accountId",
+    name: 'accountId',
     example: new Types.ObjectId(),
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -28,9 +28,9 @@ export class GetProfileParams {
 
 class UpdateMobileDto {
   @ApiProperty({
-    name: "countryCode",
-    example: "+66",
-    description: "This is a optional property",
+    name: 'countryCode',
+    example: '+66',
+    description: 'This is a optional property',
     required: true,
   })
   @IsString()
@@ -38,9 +38,9 @@ class UpdateMobileDto {
   countryCode?: string;
 
   @ApiProperty({
-    name: "number",
-    example: "999999999",
-    description: "This is a optional property",
+    name: 'number',
+    example: '999999999',
+    description: 'This is a optional property',
     required: true,
   })
   @IsString()
@@ -50,9 +50,9 @@ class UpdateMobileDto {
 
 export class UpdateProfileDto {
   @ApiProperty({
-    name: "email",
-    example: "test@example.com",
-    description: "This is a optional property",
+    name: 'email',
+    example: 'test@example.com',
+    description: 'This is a optional property',
     required: true,
   })
   @IsOptional()
@@ -60,9 +60,9 @@ export class UpdateProfileDto {
   email?: string;
 
   @ApiProperty({
-    name: "displayName",
-    example: "test1@example.com",
-    description: "This is a optional property",
+    name: 'displayName',
+    example: 'test1@example.com',
+    description: 'This is a optional property',
     required: true,
   })
   @IsOptional()
@@ -70,9 +70,9 @@ export class UpdateProfileDto {
   displayName?: string;
 
   @ApiProperty({
-    name: "mobile",
+    name: 'mobile',
     examples: UpdateMobileDto,
-    description: "This is a optional property",
+    description: 'This is a optional property',
     required: true,
     type: UpdateMobileDto,
   })
@@ -86,9 +86,9 @@ export class UpdateProfileDto {
 
 export class CreateVehicleDto {
   @ApiProperty({
-    name: "insureId",
+    name: 'insureId',
     example: new Types.ObjectId(),
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -97,9 +97,9 @@ export class CreateVehicleDto {
   insureId: string;
 
   @ApiProperty({
-    name: "brand",
-    example: "honda",
-    description: "This is a required property",
+    name: 'brand',
+    example: 'honda',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -107,9 +107,9 @@ export class CreateVehicleDto {
   brand: string;
 
   @ApiProperty({
-    name: "model",
-    example: "civic",
-    description: "This is a required property",
+    name: 'model',
+    example: 'civic',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -117,9 +117,9 @@ export class CreateVehicleDto {
   model: string;
 
   @ApiProperty({
-    name: "vehicleRegistration",
-    example: "กข-1111",
-    description: "This is a required property",
+    name: 'vehicleRegistration',
+    example: 'กข-1111',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -127,9 +127,9 @@ export class CreateVehicleDto {
   vehicleRegistration: string;
 
   @ApiProperty({
-    name: "registrationProvince",
-    example: "chiang_mai",
-    description: "This is a required property",
+    name: 'registrationProvince',
+    example: 'chiang_mai',
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -137,9 +137,9 @@ export class CreateVehicleDto {
   registrationProvince: string;
 
   @ApiProperty({
-    name: "registrationCountry",
-    example: "thailand",
-    description: "This is a required property",
+    name: 'registrationCountry',
+    example: 'thailand',
+    description: 'This is a required property',
     required: true,
   })
   @IsOptional()
@@ -147,9 +147,9 @@ export class CreateVehicleDto {
   registrationCountry?: string;
 
   @ApiProperty({
-    name: "expiredYear",
+    name: 'expiredYear',
     example: 2025,
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -158,9 +158,9 @@ export class CreateVehicleDto {
   expiredYear: number;
 
   @ApiProperty({
-    name: "insureRangeAmount",
+    name: 'insureRangeAmount',
     example: 2000.69,
-    description: "This is a optional property",
+    description: 'This is a optional property',
     required: false,
   })
   @IsOptional()
@@ -168,9 +168,9 @@ export class CreateVehicleDto {
   insureRangeAmount?: number;
 
   @ApiProperty({
-    name: "image",
+    name: 'image',
     example: null,
-    description: "This is a optional property",
+    description: 'This is a optional property',
     required: false,
   })
   @IsOptional()
@@ -180,9 +180,9 @@ export class CreateVehicleDto {
 
 export class GetVehicleListQuery {
   @ApiProperty({
-    name: "search",
-    example: "",
-    description: "This is a optional property",
+    name: 'search',
+    example: '',
+    description: 'This is a optional property',
     required: false,
   })
   @IsOptional()
@@ -190,9 +190,9 @@ export class GetVehicleListQuery {
   search?: string;
 
   @ApiProperty({
-    name: "skip",
-    example: "",
-    description: "This is a optional property",
+    name: 'skip',
+    example: '',
+    description: 'This is a optional property',
     required: false,
   })
   @IsOptional()
@@ -202,9 +202,9 @@ export class GetVehicleListQuery {
   skip: number;
 
   @ApiProperty({
-    name: "limit",
+    name: 'limit',
     example: 5,
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()

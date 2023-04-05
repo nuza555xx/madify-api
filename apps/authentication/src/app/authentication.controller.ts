@@ -1,5 +1,5 @@
-import { IResponseLogin, RequestMetadata } from "@madify-api/database";
-import { APIPrefix } from "@madify-api/utils/config";
+import { IResponseLogin, RequestMetadata } from '@madify-api/database';
+import { APIPrefix } from '@madify-api/utils/config';
 import {
   Auth,
   Authorizer,
@@ -8,22 +8,22 @@ import {
   MadifyController,
   MadifySwaggerHeaderAuth,
   RequestMeta,
-} from "@madify-api/utils/decorator";
-import { Body, Delete, Post } from "@nestjs/common";
-import { ApiBearerAuth } from "@nestjs/swagger";
+} from '@madify-api/utils/decorator';
+import { Body, Delete, Post } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   LoginWithEmailDto,
   RegisterFirebaseDto,
   RegisterWithEmailDto,
-} from "./dto/authentication.dto";
-import { AuthenticationService } from "./service/authentication.abstract";
+} from './dto/authentication.dto';
+import { AuthenticationService } from './service/authentication.abstract';
 
 @MadifyController({ path: APIPrefix.AUTHENTICATION })
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
 
   @MadifySwaggerHeaderAuth()
-  @Post("register-with-email")
+  @Post('register-with-email')
   registerWithEmail(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: RegisterWithEmailDto
@@ -37,7 +37,7 @@ export class AuthenticationController {
   }
 
   @MadifySwaggerHeaderAuth()
-  @Post("login-with-email")
+  @Post('login-with-email')
   loginWithEmail(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: LoginWithEmailDto
@@ -50,7 +50,7 @@ export class AuthenticationController {
     });
   }
 
-  @Post("register-token")
+  @Post('register-token')
   @MadifyBasicAuthorize()
   async registerToken(
     @Auth() { account }: Authorizer,
@@ -59,7 +59,7 @@ export class AuthenticationController {
     await this.authService.registerToken(dto, account);
   }
 
-  @Delete("unregister-token")
+  @Delete('unregister-token')
   @MadifyBasicAuthorize()
   async unregisterToken(
     @Auth() { account }: Authorizer,
@@ -68,8 +68,8 @@ export class AuthenticationController {
     await this.authService.unregisterToken(dto, account);
   }
 
-  @Post("refresh-token")
-  @ApiBearerAuth("JSON Web Token Authorization")
+  @Post('refresh-token')
+  @ApiBearerAuth('JSON Web Token Authorization')
   @MadifySwaggerHeaderAuth()
   async refreshToken(
     @RequestMeta() { platform, uuid }: RequestMetadata,

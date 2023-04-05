@@ -1,1 +1,1 @@
-export * from "./lib/utils-provider.module";
+export * from './lib/utils-provider.module';

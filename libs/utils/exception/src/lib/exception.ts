@@ -1,5 +1,5 @@
-import { HttpException } from "@nestjs/common";
-import { Errors } from "./exception.code";
+import { HttpException } from '@nestjs/common';
+import { Errors } from './exception.code';
 
 export interface MadifyError<T = any> {
   statusCode: string;

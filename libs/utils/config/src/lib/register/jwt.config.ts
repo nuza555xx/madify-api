@@ -1,6 +1,6 @@
-import { registerAs } from "@nestjs/config";
-import { ConfigKey } from "../config.enum";
-import { IJwtConfig } from "../config.interface";
+import { registerAs } from '@nestjs/config';
+import { ConfigKey } from '../config.enum';
+import { IJwtConfig } from '../config.interface';
 
 export const jwtConfig = registerAs(
   ConfigKey.JWT,

@@ -1,32 +1,32 @@
-import { MadifyException } from "@madify-api/utils/exception";
-import { Injectable } from "@nestjs/common";
-import { ThrottlerGuard } from "@nestjs/throttler";
-import { FastifyRequest } from "fastify";
-import { getClientIp } from "request-ip";
+import { MadifyException } from '@madify-api/utils/exception';
+import { Injectable } from '@nestjs/common';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { FastifyRequest } from 'fastify';
+import { getClientIp } from 'request-ip';
 
 @Injectable()
 export class MadifyThrottlerGuard extends ThrottlerGuard {
   override throwThrottlingException(): void {
-    throw new MadifyException("RATE_LIMIT_REQUEST");
+    throw new MadifyException('RATE_LIMIT_REQUEST');
   }
 
   override getTracker(req: FastifyRequest): string {
     const ip = getClientIp(req);
-    const userAgent = req.headers["user-agent"];
+    const userAgent = req.headers['user-agent'];
     const defaultTracker = `${ip}-${userAgent}`;
 
     return [
       defaultTracker,
       ...this.getTrackers(req.routerPath, req.body ?? {}),
-    ].join("-");
+    ].join('-');
   }
 
   private getTrackers(path: string, body: Record<string, any>) {
-    if (path.includes("register-with-email")) {
+    if (path.includes('register-with-email')) {
       return [body.email];
     }
 
-    if (path.includes("login-with-email")) {
+    if (path.includes('login-with-email')) {
       return [body.email];
     }
 

@@ -1,7 +1,7 @@
-import { CacheModule } from "@nestjs/cache-manager";
-import { Module } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { getCacheModuleOptions } from "./cache.factory";
+import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { getCacheModuleOptions } from './cache.factory';
 
 @Module({
   imports: [

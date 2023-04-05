@@ -1,7 +1,7 @@
-import { Test } from "@nestjs/testing";
-import { VehicleService } from "./vehicle.abstract";
-import { VehicleImpl } from "./vehicle.service";
-describe("VehicleService", () => {
+import { Test } from '@nestjs/testing';
+import { VehicleService } from './vehicle.abstract';
+import { VehicleImpl } from './vehicle.service';
+describe('VehicleService', () => {
   let service: VehicleService;
 
   beforeAll(async () => {
@@ -17,7 +17,7 @@ describe("VehicleService", () => {
     service = app.get<VehicleService>(VehicleService);
   });
 
-  describe("getData", () => {
+  describe('getData', () => {
     it('should return "Welcome to vehicle!"', () => {
       // expect(service.getData()).toEqual({ message: 'Welcome to vehicle!' });
     });

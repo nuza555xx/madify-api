@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { SchemaTypes } from "mongoose";
-import { BaseSchema } from "./base.schema";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { SchemaTypes } from 'mongoose';
+import { BaseSchema } from './base.schema';
 
 @Schema({ id: false, _id: false, versionKey: false })
 class Credential {
@@ -108,10 +108,10 @@ export class Account extends BaseSchema {
 
 export const AccountSchema = SchemaFactory.createForClass(Account)
   .index({ email: 1 }, { background: true })
-  .index({ "authentications.socialId": 1 }, { background: true })
-  .index({ "credentials.accessToken": 1 }, { background: true })
-  .index({ "credentials.refreshToken": 1 }, { background: true })
-  .index({ "credentials.accessTokenExpiration": 1 }, { background: true })
-  .index({ "credentials.refreshExpiration": 1 }, { background: true })
-  .index({ "credentials.platform": 1 }, { background: true })
-  .index({ "credentials.uuid": 1 }, { background: true });
+  .index({ 'authentications.socialId': 1 }, { background: true })
+  .index({ 'credentials.accessToken': 1 }, { background: true })
+  .index({ 'credentials.refreshToken': 1 }, { background: true })
+  .index({ 'credentials.accessTokenExpiration': 1 }, { background: true })
+  .index({ 'credentials.refreshExpiration': 1 }, { background: true })
+  .index({ 'credentials.platform': 1 }, { background: true })
+  .index({ 'credentials.uuid': 1 }, { background: true });

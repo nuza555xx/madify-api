@@ -7,12 +7,12 @@ import {
   PayloadResponse,
   REPOSITORY_PROVIDE,
   ResponseDto,
-} from "@madify-api/database";
-import { MadifyException } from "@madify-api/utils/exception";
-import { STORAGE_PROVIDE, StorageService } from "@madify-api/utils/provider";
-import { Inject, Injectable } from "@nestjs/common";
-import { QueryOptions } from "mongoose";
-import { VehicleService } from "./vehicle.abstract";
+} from '@madify-api/database';
+import { MadifyException } from '@madify-api/utils/exception';
+import { STORAGE_PROVIDE, StorageService } from '@madify-api/utils/provider';
+import { Inject, Injectable } from '@nestjs/common';
+import { QueryOptions } from 'mongoose';
+import { VehicleService } from './vehicle.abstract';
 
 @Injectable()
 export class VehicleImpl implements VehicleService {
@@ -30,7 +30,7 @@ export class VehicleImpl implements VehicleService {
       accountId: accountId,
     });
 
-    if (!vehicle) throw new MadifyException("SOMETHING_WRONG");
+    if (!vehicle) throw new MadifyException('SOMETHING_WRONG');
 
     return PayloadResponse.toVehicleResponse(vehicle);
   }

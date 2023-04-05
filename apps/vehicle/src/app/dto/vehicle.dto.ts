@@ -1,6 +1,6 @@
-import { Sorting } from "@madify-api/database";
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { Sorting } from '@madify-api/database';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEnum,
   IsNotEmpty,
@@ -9,13 +9,13 @@ import {
   IsString,
   Max,
   Min,
-} from "class-validator";
+} from 'class-validator';
 
 export class GetSearchVehicleQuery {
   @ApiProperty({
-    name: "search",
-    example: "",
-    description: "This is a optional property",
+    name: 'search',
+    example: '',
+    description: 'This is a optional property',
     required: false,
   })
   @IsOptional()
@@ -23,9 +23,9 @@ export class GetSearchVehicleQuery {
   search?: string;
 
   @ApiProperty({
-    name: "skip",
-    example: "",
-    description: "This is a optional property",
+    name: 'skip',
+    example: '',
+    description: 'This is a optional property',
     required: false,
   })
   @IsOptional()
@@ -35,9 +35,9 @@ export class GetSearchVehicleQuery {
   skip: number;
 
   @ApiProperty({
-    name: "limit",
+    name: 'limit',
     example: 5,
-    description: "This is a required property",
+    description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
@@ -48,9 +48,9 @@ export class GetSearchVehicleQuery {
   limit: number;
 
   @ApiProperty({
-    name: "sorting",
+    name: 'sorting',
     example: Sorting.ASC,
-    description: "This is a required property",
+    description: 'This is a required property',
     required: false,
     enum: Sorting,
   })
