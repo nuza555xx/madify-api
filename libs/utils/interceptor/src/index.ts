@@ -1,1 +1,1 @@
-export * from "./lib/utils-interceptor.module";
+export * from './lib/utils-interceptor.module';

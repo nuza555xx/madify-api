@@ -1,16 +1,16 @@
-import { FilterQuery, Types } from "mongoose";
-import { Account } from "../schema/account.schema";
-import { Province } from "../schema/province.model.schema";
-import { VehicleBrand } from "../schema/vehicle.brand.schema";
-import { VehicleModel } from "../schema/vehicle.model.schema";
-import { Vehicle } from "../schema/vehicle.schema";
+import { FilterQuery, Types } from 'mongoose';
+import { Account } from '../schema/account.schema';
+import { Province } from '../schema/province.model.schema';
+import { VehicleBrand } from '../schema/vehicle.brand.schema';
+import { VehicleModel } from '../schema/vehicle.model.schema';
+import { Vehicle } from '../schema/vehicle.schema';
 import {
   AccountQuery,
   ProvinceQuery,
   VehicleBrandQuery,
   VehicleModelQuery,
   VehicleQuery,
-} from "./repository.interface";
+} from './repository.interface';
 
 export class PrepareQuery {
   findAccountFilters(query: AccountQuery): FilterQuery<Account> {
@@ -20,31 +20,31 @@ export class PrepareQuery {
     if (query?.id) filters._id = new Types.ObjectId(String(query.id));
 
     if (query?.credentials?.accessToken)
-      filters["credentials.accessToken"] = query.credentials?.accessToken;
+      filters['credentials.accessToken'] = query.credentials?.accessToken;
 
     if (query?.credentials?.accessTokenExpiration)
-      filters["credentials.accessTokenExpiration"] =
+      filters['credentials.accessTokenExpiration'] =
         query.credentials?.accessTokenExpiration;
 
     if (query?.credentials?.refreshToken)
-      filters["credentials.refreshToken"] = query.credentials?.refreshToken;
+      filters['credentials.refreshToken'] = query.credentials?.refreshToken;
 
     if (query?.credentials?.refreshTokenExpiration)
-      filters["credentials.refreshTokenExpiration"] =
+      filters['credentials.refreshTokenExpiration'] =
         query.credentials?.refreshTokenExpiration;
 
     if (query?.credentials?.platform)
-      filters["credentials.platform"] = query?.credentials?.platform;
+      filters['credentials.platform'] = query?.credentials?.platform;
 
     if (query?.credentials?.uuid)
-      filters["credentials.uuid"] = query?.credentials?.uuid;
+      filters['credentials.uuid'] = query?.credentials?.uuid;
 
     if (query?.visibility) filters.visibility = query.visibility;
 
-    if (query?.devices?.uuid) filters["devices.uuid"] = query.devices.uuid;
+    if (query?.devices?.uuid) filters['devices.uuid'] = query.devices.uuid;
 
     if (query?.devices?.platform)
-      filters["devices.platform"] = query.devices.platform;
+      filters['devices.platform'] = query.devices.platform;
 
     return filters;
   }
@@ -90,9 +90,9 @@ export class PrepareQuery {
 
     if (query?.id) filters._id = new Types.ObjectId(String(query.id));
 
-    if (query?.name?.th) filters["name.th"] = query.name.th;
+    if (query?.name?.th) filters['name.th'] = query.name.th;
 
-    if (query?.name?.en) filters["name.en"] = query.name.en;
+    if (query?.name?.en) filters['name.en'] = query.name.en;
 
     if (query?.slug) filters.slug = query.slug;
 
@@ -104,9 +104,9 @@ export class PrepareQuery {
 
     if (query?.id) filters._id = new Types.ObjectId(String(query.id));
 
-    if (query?.name?.th) filters["name.th"] = query.name.th;
+    if (query?.name?.th) filters['name.th'] = query.name.th;
 
-    if (query?.name?.en) filters["name.en"] = query.name.en;
+    if (query?.name?.en) filters['name.en'] = query.name.en;
 
     if (query?.slug) filters.slug = query.slug;
 
@@ -120,9 +120,9 @@ export class PrepareQuery {
 
     if (query?.id) filters._id = new Types.ObjectId(String(query.id));
 
-    if (query?.name?.th) filters["name.th"] = query.name.th;
+    if (query?.name?.th) filters['name.th'] = query.name.th;
 
-    if (query?.name?.en) filters["name.en"] = query.name.en;
+    if (query?.name?.en) filters['name.en'] = query.name.en;
 
     if (query?.slug) filters.slug = query.slug;
 

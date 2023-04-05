@@ -1,6 +1,6 @@
-import { registerAs } from "@nestjs/config";
-import { ConfigKey } from "../config.enum";
-import { IStorageConfig } from "../config.interface";
+import { registerAs } from '@nestjs/config';
+import { ConfigKey } from '../config.enum';
+import { IStorageConfig } from '../config.interface';
 
 export const storageConfig = registerAs(
   ConfigKey.STORAGE,

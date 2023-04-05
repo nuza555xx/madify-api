@@ -1,4 +1,4 @@
-import { compare, hash } from "bcrypt";
+import { compare, hash } from 'bcrypt';
 const saltOrRounds = 10;
 
 export class MadifyHash {

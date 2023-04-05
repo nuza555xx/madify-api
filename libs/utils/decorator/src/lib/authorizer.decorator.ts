@@ -1,6 +1,6 @@
-import { Account } from "@madify-api/database";
-import { MadifyException } from "@madify-api/utils/exception";
-import { ExecutionContext, createParamDecorator } from "@nestjs/common";
+import { Account } from '@madify-api/database';
+import { MadifyException } from '@madify-api/utils/exception';
+import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 
 export class Authorizer {
   constructor(public account: Account) {}
@@ -8,7 +8,7 @@ export class Authorizer {
   requestAccessForAccount(accountId: any) {
     if (this.account.id === String(accountId)) return;
 
-    throw new MadifyException("FORBIDDEN");
+    throw new MadifyException('FORBIDDEN');
   }
 }
 

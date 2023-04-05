@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { SchemaTypes, Types } from "mongoose";
-import { BaseSchema } from "./base.schema";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { SchemaTypes, Types } from 'mongoose';
+import { BaseSchema } from './base.schema';
 
 @Schema()
 export class Otp extends BaseSchema {

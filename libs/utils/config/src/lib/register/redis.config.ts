@@ -1,7 +1,7 @@
-import { registerAs } from "@nestjs/config";
-import * as redisStore from "cache-manager-redis-store";
-import { ConfigKey } from "../config.enum";
-import { IRedisConfig } from "../config.interface";
+import { registerAs } from '@nestjs/config';
+import * as redisStore from 'cache-manager-redis-store';
+import { ConfigKey } from '../config.enum';
+import { IRedisConfig } from '../config.interface';
 
 export const redisStoreConfig = registerAs(
   ConfigKey.STORE,

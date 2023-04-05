@@ -1,6 +1,6 @@
-import { ConfigKey, IJwtConfig } from "@madify-api/utils/config";
-import { ConfigService } from "@nestjs/config";
-import { JwtModuleOptions } from "@nestjs/jwt";
+import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
+import { ConfigService } from '@nestjs/config';
+import { JwtModuleOptions } from '@nestjs/jwt';
 
 export const getJWTModuleOptions = (
   config: ConfigService

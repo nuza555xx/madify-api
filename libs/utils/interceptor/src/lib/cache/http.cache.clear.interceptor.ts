@@ -1,5 +1,5 @@
-import { MadifyException } from "@madify-api/utils/exception";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { MadifyException } from '@madify-api/utils/exception';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   CACHE_KEY_METADATA,
   CallHandler,
@@ -7,11 +7,11 @@ import {
   Inject,
   Injectable,
   NestInterceptor,
-} from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { Cache } from "cache-manager";
-import { FastifyRequest } from "fastify";
-import { Observable } from "rxjs";
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { Cache } from 'cache-manager';
+import { FastifyRequest } from 'fastify';
+import { Observable } from 'rxjs';
 @Injectable()
 export class HttpCacheClearInterceptor implements NestInterceptor {
   constructor(
@@ -50,9 +50,9 @@ export class HttpCacheClearInterceptor implements NestInterceptor {
   }
 
   private getTokenFromRequest(request: FastifyRequest) {
-    const [type, token] = request.headers.authorization?.split(" ") ?? [];
-    if (!token) throw new MadifyException("MISSING_AUTHORIZATION_HEADERS");
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    if (!token) throw new MadifyException('MISSING_AUTHORIZATION_HEADERS');
 
-    return type === "Bearer" ? token : undefined;
+    return type === 'Bearer' ? token : undefined;
   }
 }

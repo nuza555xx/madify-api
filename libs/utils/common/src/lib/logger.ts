@@ -1,11 +1,11 @@
-import { inspect } from "util";
-import { ConsoleLogger, ConsoleLoggerOptions, LogLevel } from "@nestjs/common";
+import { inspect } from 'util';
+import { ConsoleLogger, ConsoleLoggerOptions, LogLevel } from '@nestjs/common';
 
 export class MadifyLogger extends ConsoleLogger {
   private static Levels: LogLevel[] =
-    process.env.NODE_ENV === "production"
-      ? ["log", "error", "warn"]
-      : ["log", "error", "warn", "debug", "verbose"];
+    process.env.NODE_ENV === 'production'
+      ? ['log', 'error', 'warn']
+      : ['log', 'error', 'warn', 'debug', 'verbose'];
 
   constructor(
     context?: string,
@@ -18,9 +18,9 @@ export class MadifyLogger extends ConsoleLogger {
   }
 
   formatContext(context?: unknown, time?: number) {
-    const timeContext = time ? `+${time}ms` : "";
+    const timeContext = time ? `+${time}ms` : '';
 
-    return `[${this.context ?? context ?? "unknown"}] - ${timeContext}`;
+    return `[${this.context ?? context ?? 'unknown'}] - ${timeContext}`;
   }
 
   log(message: any, context?: unknown) {
@@ -35,10 +35,10 @@ export class MadifyLogger extends ConsoleLogger {
             message: message.name,
             stack: message.stack,
           })
-        : typeof message === "string"
+        : typeof message === 'string'
         ? message
         : inspect(message),
-      "",
+      '',
       this.formatContext(context)
     );
   }

@@ -1,10 +1,10 @@
-import { CacheInterceptor } from "@nestjs/cache-manager";
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   CACHE_KEY_METADATA,
   ExecutionContext,
   Injectable,
-} from "@nestjs/common";
-import { FastifyRequest } from "fastify";
+} from '@nestjs/common';
+import { FastifyRequest } from 'fastify';
 
 @Injectable()
 export class HttpCacheSharedWithQueryInterceptor extends CacheInterceptor {

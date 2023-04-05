@@ -1,5 +1,5 @@
-import { AcceptPlatform } from "../enum/user.enum";
-import { RequestMetadata } from "./global.interface";
+import { AcceptPlatform } from '../enum/user.enum';
+import { RequestMetadata } from './global.interface';
 
 export interface IRegisterWithEmail extends RequestMetadata {
   email: string;

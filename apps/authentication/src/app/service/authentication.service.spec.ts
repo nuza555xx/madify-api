@@ -1,8 +1,8 @@
-import { Test } from "@nestjs/testing";
-import { AuthenticationService } from "./authentication.abstract";
-import { AuthenticationImpl } from "./authentication.service";
+import { Test } from '@nestjs/testing';
+import { AuthenticationService } from './authentication.abstract';
+import { AuthenticationImpl } from './authentication.service';
 
-describe("AuthenticationService", () => {
+describe('AuthenticationService', () => {
   let service: AuthenticationService;
 
   beforeAll(async () => {
@@ -18,7 +18,7 @@ describe("AuthenticationService", () => {
     service = app.get<AuthenticationService>(AuthenticationService);
   });
 
-  describe("getData", () => {
+  describe('getData', () => {
     it('should return "Welcome to authentication!"', () => {
       // expect(service.getData()).toEqual({
       //   message: 'Welcome to authentication!',

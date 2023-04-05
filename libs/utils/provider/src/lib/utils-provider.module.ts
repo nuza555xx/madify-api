@@ -1,7 +1,7 @@
-import { Module } from "@nestjs/common";
-import { StorageService } from "./google/storage.service";
+import { Module } from '@nestjs/common';
+import { StorageService } from './google/storage.service';
 
-export const STORAGE_PROVIDE = "storage";
+export const STORAGE_PROVIDE = 'storage';
 
 @Module({
   providers: [

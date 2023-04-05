@@ -5,7 +5,7 @@ import {
   IRegisterFirebase,
   IRegisterWithEmail,
   IResponseLogin,
-} from "@madify-api/database";
+} from '@madify-api/database';
 
 export abstract class AuthenticationService {
   abstract registerWithEmail(dto: IRegisterWithEmail): Promise<IResponseLogin>;

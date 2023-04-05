@@ -5,7 +5,7 @@ import {
   IResponseVehicle,
   IUpdateProfile,
   ResponseDto,
-} from "@madify-api/database";
+} from '@madify-api/database';
 
 export abstract class UserService {
   abstract getProfile(accountId: string): Promise<IResponseProfile>;

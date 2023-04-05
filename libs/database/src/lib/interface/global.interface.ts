@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { AcceptPlatform } from "../enum/user.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { AcceptPlatform } from '../enum/user.enum';
 
 export class Meta {
   previous?: number;
