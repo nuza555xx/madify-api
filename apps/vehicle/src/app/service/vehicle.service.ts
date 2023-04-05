@@ -1,23 +1,18 @@
-import { EntityVisibility } from '@madify-api/enum';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { VehicleService } from './vehicle.abstract';
 import {
+  ICreateVehicle,
   IGetVehicleList,
-  ResponseDto,
+  IRepository,
   IResponseVehicle,
   Meta,
-  ICreateVehicle,
-} from '@madify-api/interface';
-import {
-  REPOSITORY_PROVIDE,
-  IRepository,
-  Vehicle,
   PayloadResponse,
-} from '@madify-api/database';
-import { MadifyPagination } from '@madify-api/common';
-import { QueryOptions, Types } from 'mongoose';
-import { MadifyException } from '@madify-api/exception';
-import { STORAGE_PROVIDE, StorageService } from '@madify-api/gcp';
+  REPOSITORY_PROVIDE,
+  ResponseDto,
+} from "@madify-api/database";
+import { MadifyException } from "@madify-api/utils/exception";
+import { STORAGE_PROVIDE, StorageService } from "@madify-api/utils/provider";
+import { Inject, Injectable } from "@nestjs/common";
+import { QueryOptions } from "mongoose";
+import { VehicleService } from "./vehicle.abstract";
 
 @Injectable()
 export class VehicleImpl implements VehicleService {
@@ -35,7 +30,7 @@ export class VehicleImpl implements VehicleService {
       accountId: accountId,
     });
 
-    if (!vehicle) throw new MadifyException('SOMETHING_WRONG');
+    if (!vehicle) throw new MadifyException("SOMETHING_WRONG");
 
     return PayloadResponse.toVehicleResponse(vehicle);
   }

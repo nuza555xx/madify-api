@@ -1,5 +1,6 @@
-import { AcceptPlatform, EntityVisibility } from '@madify-api/enum';
-import { QuerySelector, RootQuerySelector } from 'mongoose';
+import { QuerySelector, RootQuerySelector } from "mongoose";
+import { EntityVisibility } from "../enum/base.enum";
+import { AcceptPlatform } from "../enum/user.enum";
 
 export type AccountQuery = {
   id?: string;

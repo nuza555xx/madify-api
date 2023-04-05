@@ -1,12 +1,15 @@
-import { IResponseVehicle, IResponseProfile } from '@madify-api/interface';
-import { Account } from '../schema/account.schema';
-import { Vehicle } from '../schema/vehicle.schema';
+import {
+  IResponseProfile,
+  IResponseVehicle,
+} from "../interface/account.interface";
+import { Account } from "../schema/account.schema";
+import { Vehicle } from "../schema/vehicle.schema";
 
 export class PayloadResponse {
-  static async toVehicleResponse(
+  static toVehicleResponse<T>(
     vehicle: Vehicle,
-    options?: Record<string, any>
-  ): Promise<IResponseVehicle> {
+    options?: Record<string, T>
+  ): IResponseVehicle {
     return {
       brand: vehicle.brand,
       model: vehicle.model,

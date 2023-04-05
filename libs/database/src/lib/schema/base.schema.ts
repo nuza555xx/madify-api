@@ -1,6 +1,6 @@
-import { EntityVisibility } from '@madify-api/enum';
-import { Prop, Schema } from '@nestjs/mongoose';
-import { Document, SchemaTypes } from 'mongoose';
+import { Prop, Schema } from "@nestjs/mongoose";
+import { Document, SchemaTypes } from "mongoose";
+import { EntityVisibility } from "../enum/base.enum";
 
 @Schema({ id: false, _id: false, versionKey: false })
 export class BaseSchema extends Document {

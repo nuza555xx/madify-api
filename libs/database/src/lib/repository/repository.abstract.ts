@@ -1,23 +1,23 @@
 import {
-  AccountQuery,
-  ProvinceQuery,
-  VehicleBrandQuery,
-  VehicleModelQuery,
-  VehicleQuery,
-} from './repository.interface';
-import {
   AnyKeys,
   QueryOptions,
   SaveOptions,
   Types,
   UpdateQuery,
   UpdateWriteOpResult,
-} from 'mongoose';
-import { Account } from '../schema/account.schema';
-import { Vehicle } from '../schema/vehicle.schema';
-import { VehicleBrand } from '../schema/vehicle.brand.schema';
-import { VehicleModel } from '../schema/vehicle.model.schema';
-import { Province } from '../schema/province.model.schema';
+} from "mongoose";
+import { Account } from "../schema/account.schema";
+import { Province } from "../schema/province.model.schema";
+import { VehicleBrand } from "../schema/vehicle.brand.schema";
+import { VehicleModel } from "../schema/vehicle.model.schema";
+import { Vehicle } from "../schema/vehicle.schema";
+import {
+  AccountQuery,
+  ProvinceQuery,
+  VehicleBrandQuery,
+  VehicleModelQuery,
+  VehicleQuery,
+} from "./repository.interface";
 
 export type ResultAccount = Account & {
   _id: Types.ObjectId;
