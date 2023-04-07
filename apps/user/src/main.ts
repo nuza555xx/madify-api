@@ -17,7 +17,7 @@ import { UserModule } from './app/user.module';
 
 async function bootstrap() {
   const prefix = APIPrefix.USER;
-  const port = process.env.PORT || 5002;
+  const port = process.env.PORT || 3002;
   const fastifyAdapter = new FastifyAdapter();
   const app = await NestFactory.create<NestFastifyApplication>(
     UserModule,

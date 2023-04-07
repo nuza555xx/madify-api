@@ -1,11 +1,17 @@
-import { AcceptPlatform, Objective } from '@madify-api/database';
+import {
+  AcceptPlatform,
+  Objective,
+  SocialProvider,
+} from '@madify-api/database';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsEnum,
   IsJWT,
   IsMobilePhone,
   IsNotEmpty,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -41,6 +47,69 @@ export class RegisterWithEmailDto {
   displayName: string;
 }
 
+export class RegisterWithSocialDto {
+  @ApiProperty({
+    name: 'email',
+    example: 'test@example.com',
+    description: 'This is a required property',
+    required: true,
+  })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    name: 'displayName',
+    example: 'test@example.com',
+    description: 'This is a required property',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  displayName: string;
+
+  @ApiProperty({
+    name: 'socialId',
+    example: '1234567890',
+    description: 'This is a required property',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  socialId: string;
+
+  @ApiProperty({
+    name: 'authToken',
+    example: '',
+    description: 'This is a optional property',
+    required: false,
+  })
+  @IsString()
+  @IsNotEmpty()
+  authToken?: string;
+
+  @ApiProperty({
+    name: 'provider',
+    example: SocialProvider.Google,
+    description: 'This is a required property',
+    enum: SocialProvider,
+    required: true,
+  })
+  @IsEnum(SocialProvider)
+  @Type(() => String)
+  @IsNotEmpty()
+  provider: SocialProvider;
+
+  @ApiProperty({
+    name: 'image',
+    example: '',
+    description: 'This is a optional property',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  image?: string;
+}
+
 export class LoginWithEmailDto {
   @ApiProperty({
     name: 'email',
@@ -60,6 +129,69 @@ export class LoginWithEmailDto {
   @IsNotEmpty()
   @IsString()
   password: string;
+}
+
+export class LoginWithSocialDto {
+  @ApiProperty({
+    name: 'email',
+    example: 'test@example.com',
+    description: 'This is a required property',
+    required: true,
+  })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    name: 'displayName',
+    example: 'test@example.com',
+    description: 'This is a required property',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  displayName: string;
+
+  @ApiProperty({
+    name: 'socialId',
+    example: '1234567890',
+    description: 'This is a required property',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  socialId: string;
+
+  @ApiProperty({
+    name: 'authToken',
+    example: '',
+    description: 'This is a optional property',
+    required: false,
+  })
+  @IsString()
+  @IsNotEmpty()
+  authToken?: string;
+
+  @ApiProperty({
+    name: 'provider',
+    example: SocialProvider.Google,
+    description: 'This is a required property',
+    enum: SocialProvider,
+    required: true,
+  })
+  @IsEnum(SocialProvider)
+  @Type(() => String)
+  @IsNotEmpty()
+  provider: SocialProvider;
+
+  @ApiProperty({
+    name: 'image',
+    example: '',
+    description: 'This is a optional property',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  image?: string;
 }
 
 export class RequestOTPDto {

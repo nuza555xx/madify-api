@@ -13,8 +13,10 @@ import { Body, Delete, Post } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   LoginWithEmailDto,
+  LoginWithSocialDto,
   RegisterFirebaseDto,
   RegisterWithEmailDto,
+  RegisterWithSocialDto,
 } from './dto/authentication.dto';
 import { AuthenticationService } from './service/authentication.abstract';
 
@@ -37,12 +39,40 @@ export class AuthenticationController {
   }
 
   @MadifySwaggerHeaderAuth()
+  @Post('register-with-social')
+  registerWithSocial(
+    @RequestMeta() { ip, platform, uuid }: RequestMetadata,
+    @Body() dto: RegisterWithSocialDto
+  ): Promise<IResponseLogin> {
+    return this.authService.registerWithSocial({
+      ...dto,
+      ip,
+      platform,
+      uuid,
+    });
+  }
+
+  @MadifySwaggerHeaderAuth()
   @Post('login-with-email')
   loginWithEmail(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: LoginWithEmailDto
   ): Promise<IResponseLogin> {
     return this.authService.loginWithEmail({
+      ...dto,
+      ip,
+      platform,
+      uuid,
+    });
+  }
+
+  @MadifySwaggerHeaderAuth()
+  @Post('login-with-social')
+  loginWithSocial(
+    @RequestMeta() { ip, platform, uuid }: RequestMetadata,
+    @Body() dto: LoginWithSocialDto
+  ): Promise<IResponseLogin> {
+    return this.authService.loginWithSocial({
       ...dto,
       ip,
       platform,
