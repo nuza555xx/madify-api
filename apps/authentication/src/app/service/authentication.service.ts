@@ -2,9 +2,11 @@ import {
   Account,
   IGenerateToken,
   ILoginWithEmail,
+  ILoginWithSocial,
   IRefreshToken,
   IRegisterFirebase,
   IRegisterWithEmail,
+  IRegisterWithSocial,
   IRepository,
   IResponseLogin,
   REPOSITORY_PROVIDE,
@@ -88,6 +90,39 @@ export class AuthenticationImpl implements AuthenticationService {
     };
   }
 
+  async registerWithSocial({
+    socialId,
+    provider,
+    authToken,
+    image,
+    ...dto
+  }: IRegisterWithSocial): Promise<IResponseLogin> {
+    if (![dto.platform, dto.uuid].every((exists) => exists))
+      throw new MadifyException('MISSING_METADATA_HEADERS');
+    let account = await this.repository.findAccount({ email: dto.email });
+    if (!account) {
+      account = await this.repository.createAccount(dto);
+      if (!account) throw new MadifyException('NOT_FOUND_DATA');
+    }
+    const token = await this.generateAllToken(account);
+    (account.authentications ??= []).push({
+      socialId,
+      provider,
+      authToken,
+      image,
+    });
+    (account.credentials ??= []).push({
+      platform: dto.platform,
+      uuid: dto.uuid,
+      ...token,
+    });
+    await account.save();
+    return {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+    };
+  }
+
   async loginWithEmail(dto: ILoginWithEmail): Promise<IResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
@@ -139,6 +174,95 @@ export class AuthenticationImpl implements AuthenticationService {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
     };
+  }
+
+  async loginWithSocial({
+    socialId,
+    provider,
+    authToken,
+    image,
+    ...dto
+  }: ILoginWithSocial): Promise<IResponseLogin> {
+    if (![dto.platform, dto.uuid].every((exists) => exists))
+      throw new MadifyException('MISSING_METADATA_HEADERS');
+
+    const account = await this.repository.findAccount({
+      email: dto.email,
+      authentication: {
+        socialId: socialId,
+        provider: provider,
+      },
+    });
+    if (!account) {
+      throw new MadifyException('NOT_FOUND_DATA');
+    }
+
+    const token = await this.generateAllToken(account);
+    const credential = account.credentials.find(
+      ({ uuid, platform }) => dto.uuid === uuid && dto.platform === platform
+    );
+
+    if (credential) {
+      await this.repository.updateAccount(
+        {
+          id: account._id,
+          credentials: {
+            platform: dto.platform,
+            uuid: dto.uuid,
+          },
+        },
+        {
+          $set: {
+            'credentials.$': {
+              platform: dto.platform,
+              uuid: dto.uuid,
+              ...token,
+            },
+          },
+        }
+      );
+    } else {
+      (account.credentials ??= []).push({
+        platform: dto.platform,
+        uuid: dto.uuid,
+        ...token,
+      });
+      await account.save();
+    }
+
+    return {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+    };
+    // if (![dto.platform, dto.uuid].every((exists) => exists))
+    //   throw new MadifyException('MISSING_METADATA_HEADERS');
+
+    // let account = await this.repository.findAccount({ email: dto.email });
+    // if (!account) {
+    //   account = await this.repository.createAccount(dto);
+    //   if (!account) throw new MadifyException('NOT_FOUND_DATA');
+    // }
+
+    // const token = await this.generateAllToken(account);
+
+    // (account.authentications ??= []).push({
+    //   socialId,
+    //   provider,
+    //   authToken,
+    //   image,
+    // });
+
+    // (account.credentials ??= []).push({
+    //   platform: dto.platform,
+    //   uuid: dto.uuid,
+    //   ...token,
+    // });
+    // await account.save();
+
+    // return {
+    //   accessToken: token.accessToken,
+    //   refreshToken: token.refreshToken,
+    // };
   }
 
   async registerToken(

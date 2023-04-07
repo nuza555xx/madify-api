@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes } from 'mongoose';
+import { SocialProvider } from '../enum/user.enum';
 import { BaseSchema } from './base.schema';
 
 @Schema({ id: false, _id: false, versionKey: false })
@@ -55,14 +56,17 @@ const ActivationSchema = SchemaFactory.createForClass(Activation);
 
 @Schema({ id: false, _id: false, versionKey: false })
 class Authentication {
-  @Prop({ type: SchemaTypes.String, unique: true })
+  @Prop({ type: SchemaTypes.String })
   socialId: string;
 
   @Prop({ type: SchemaTypes.String })
-  socialToken?: string;
+  authToken?: string;
 
   @Prop({ type: SchemaTypes.String })
-  avatar?: string;
+  image?: string;
+
+  @Prop({ type: SchemaTypes.String, enum: SocialProvider })
+  provider: SocialProvider;
 }
 
 const AuthenticationSchema = SchemaFactory.createForClass(Authentication);
@@ -72,7 +76,7 @@ export class Account extends BaseSchema {
   @Prop({ type: SchemaTypes.String, index: true, required: true, unique: true })
   email: string;
 
-  @Prop({ type: SchemaTypes.String, required: true })
+  @Prop({ type: SchemaTypes.String })
   password: string;
 
   @Prop({ type: SchemaTypes.String, required: true })
@@ -97,7 +101,7 @@ export class Account extends BaseSchema {
   credentials?: Credential[];
 
   @Prop({ type: [AuthenticationSchema] })
-  authentications?: Authentication;
+  authentications?: Authentication[];
 
   @Prop({ type: [ActivationSchema] })
   activations?: Activation[];

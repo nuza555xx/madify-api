@@ -1,4 +1,4 @@
-import { AcceptPlatform } from '../enum/user.enum';
+import { AcceptPlatform, SocialProvider } from '../enum/user.enum';
 import { RequestMetadata } from './global.interface';
 
 export interface IRegisterWithEmail extends RequestMetadata {
@@ -7,9 +7,26 @@ export interface IRegisterWithEmail extends RequestMetadata {
   displayName: string;
 }
 
+export interface IRegisterWithSocial extends RequestMetadata {
+  email: string;
+  displayName: string;
+  socialId: string;
+  provider: SocialProvider;
+  authToken?: string;
+  image?: string;
+}
 export interface ILoginWithEmail extends RequestMetadata {
   email: string;
   password: string;
+}
+
+export interface ILoginWithSocial extends RequestMetadata {
+  email: string;
+  displayName: string;
+  socialId: string;
+  provider: SocialProvider;
+  authToken?: string;
+  image?: string;
 }
 
 export interface IResponseLogin {
@@ -35,6 +52,7 @@ export interface IRefreshToken extends RequestMetadata {
 }
 
 export interface IResponseProfile {
+  id: string;
   email: string;
   mobile: {
     countryCode: string;
@@ -69,6 +87,7 @@ export interface ICreateVehicle {
 }
 
 export interface IResponseVehicle {
+  id: string;
   brand: string;
   model: string;
   vehicleRegistration: string;

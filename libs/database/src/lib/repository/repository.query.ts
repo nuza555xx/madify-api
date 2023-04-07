@@ -46,6 +46,12 @@ export class PrepareQuery {
     if (query?.devices?.platform)
       filters['devices.platform'] = query.devices.platform;
 
+    if (query?.authentication?.socialId)
+      filters['authentication.socialId'] = query?.authentication?.socialId;
+
+    if (query?.authentication?.provider)
+      filters['authentication.provider'] = query?.authentication?.provider;
+
     return filters;
   }
 

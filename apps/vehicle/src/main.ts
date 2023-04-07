@@ -16,7 +16,7 @@ import { VehicleModule } from './app/vehicle.module';
 
 async function bootstrap() {
   const prefix = APIPrefix.VEHICLE;
-  const port = process.env.PORT || 5003;
+  const port = process.env.PORT || 3003;
   const fastifyAdapter = new FastifyAdapter();
   const app = await NestFactory.create<NestFastifyApplication>(
     VehicleModule,

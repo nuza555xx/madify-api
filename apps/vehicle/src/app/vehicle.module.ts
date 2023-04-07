@@ -4,7 +4,6 @@ import { MadifyUtilsInterceptorModule } from '@madify-api/utils/interceptor';
 import {
   MadifyCacheModule,
   MadifyJwtConfigModule,
-  MadifyThrottlerModule,
 } from '@madify-api/utils/module';
 import { MadifyUtilsProviderModule } from '@madify-api/utils/provider';
 import { Module } from '@nestjs/common';
@@ -17,7 +16,6 @@ import { VehicleController } from './vehicle.controller';
     MadifyConfigModule,
     MadifyDatabaseModule,
     MadifyJwtConfigModule,
-    MadifyThrottlerModule,
     MadifyCacheModule,
     MadifyUtilsInterceptorModule,
     MadifyUtilsProviderModule,
