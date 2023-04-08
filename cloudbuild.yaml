@@ -1,0 +1,36 @@
+steps:
+  - name: 'node:18-alpine'
+    entrypoint: 'npm'
+    args: ['install']
+  - name: 'node:18-alpine'
+    entrypoint: 'npm'
+    args: ['run', 'build', 'authentication']
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest',
+        '-f',
+        './Dockerfile.authentication',
+        '.',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run',
+        'deploy',
+        'authentication',
+        '--image',
+        'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest',
+        '--region',
+        'asia-southeast1',
+        '--allow-unauthenticated',
+      ]
+
+images:
+  - 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest'
