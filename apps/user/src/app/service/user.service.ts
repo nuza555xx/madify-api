@@ -31,6 +31,7 @@ export class UserImpl implements UserService {
     }
 
     return {
+      id: account.id,
       email: account.email,
       displayName: account.displayName,
       mobile: account.mobile,

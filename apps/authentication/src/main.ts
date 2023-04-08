@@ -17,7 +17,7 @@ import { AuthenticationModule } from './app/authentication.module';
 
 async function bootstrap() {
   const prefix = APIPrefix.AUTHENTICATION;
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3000;
   const fastifyAdapter = new FastifyAdapter();
   const app = await NestFactory.create<NestFastifyApplication>(
     AuthenticationModule,

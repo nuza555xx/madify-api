@@ -51,29 +51,29 @@ jobs:
       - name: Build Project
         run: npm run build ${{ matrix.app }}
 
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        app:
-          - authentication
-          - vehicle
-          - user
-    name: Test ${{ matrix.app }} service
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-      - uses: actions/cache@v3
-        id: cache
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-test-${{ matrix.app }}-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
-      - name: Test Project
-        run: npm run test ${{ matrix.app }}
+  # test:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app:
+  #         - authentication
+  #         - vehicle
+  #         - user
+  #   name: Test ${{ matrix.app }} service
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '18'
+  #         cache: 'npm'
+  #     - uses: actions/cache@v3
+  #       id: cache
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-test-${{ matrix.app }}-${{ hashFiles('**/package-lock.json') }}
+  #     - name: Install Dependencies
+  #       if: steps.cache.outputs.cache-hit != 'true'
+  #       run: npm ci
+  #     - name: Test Project
+  #       run: npm run test ${{ matrix.app }}

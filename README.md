@@ -23,3 +23,8 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 ## Run script
 
 Run `npm run seed  -- PATH_FILE --url="MONGODB_URL" --dbName="DB_NAME"`
+
+
+## Docker build
+
+Run `docker build -t {service}-service:latest -f Dockerfile.{service} .`
