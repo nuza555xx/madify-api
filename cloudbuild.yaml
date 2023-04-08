@@ -34,3 +34,6 @@ steps:
 
 images:
   - 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
