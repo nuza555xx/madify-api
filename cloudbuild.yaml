@@ -32,8 +32,6 @@ steps:
         '--allow-unauthenticated',
       ]
 
+logsBucket: 'gs://madify-382216_cloudbuild'
 images:
   - 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
