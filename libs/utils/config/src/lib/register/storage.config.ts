@@ -8,8 +8,8 @@ export const storageConfig = registerAs(
     projectId: process.env.PROJECT_ID,
     clientEmail: process.env.CLIENT_EMAIL,
     clientId: process.env.CLIENT_ID,
-    privateKey: process.env.PRIVATE_KEY,
+    privateKey: process.env.PRIVATE_KEY?.replace(/\\n/gm, '\n'),
     bucketName: process.env.BUCKET_NAME,
-    expired: Number(process.env.REDIS_CACHED_SHARED_TTL ?? 1000) * 60 * 60,
+    expired: Number(process.env.REDIS_CACHE_SHARED_TTL ?? 1000) * 60 * 60,
   })
 );

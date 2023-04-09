@@ -6,7 +6,7 @@ COPY ./dist/apps/user .
 
 COPY package*.json ./
 
-ENV PORT=3000
+ENV PORT=80
 
 EXPOSE ${PORT}
 

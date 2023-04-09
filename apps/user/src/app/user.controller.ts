@@ -7,7 +7,16 @@ import {
   MadifyAuthorizeAndClearCached,
   MadifyController,
 } from '@madify-api/utils/decorator';
-import { Body, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import {
   CreateVehicleDto,
   GetProfileParams,
@@ -19,6 +28,12 @@ import { UserService } from './service/user.abstract';
 @MadifyController({ path: APIPrefix.USER })
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  healthCheck(): boolean {
+    return true;
+  }
 
   @Get(':accountId')
   @MadifyAuthorize(RedisCacheKey.USER)

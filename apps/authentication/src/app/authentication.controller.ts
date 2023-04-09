@@ -9,7 +9,7 @@ import {
   MadifySwaggerHeaderAuth,
   RequestMeta,
 } from '@madify-api/utils/decorator';
-import { Body, Delete, Post } from '@nestjs/common';
+import { Body, Delete, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   LoginWithEmailDto,
@@ -23,6 +23,12 @@ import { AuthenticationService } from './service/authentication.abstract';
 @MadifyController({ path: APIPrefix.AUTHENTICATION })
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
+
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  healthCheck(): boolean {
+    return true;
+  }
 
   @MadifySwaggerHeaderAuth()
   @Post('register-with-email')
