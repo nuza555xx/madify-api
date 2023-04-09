@@ -28,3 +28,8 @@ Run `npm run seed  -- PATH_FILE --url="MONGODB_URL" --dbName="DB_NAME"`
 ## Docker build
 
 Run `docker build -t {service}-service:latest -f Dockerfile.{service} .`
+
+
+## GCP build
+
+Run `gcloud builds submit --config=cloudbuild.yaml .`
