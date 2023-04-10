@@ -6,6 +6,7 @@ export class MadifyLogger extends ConsoleLogger {
     process.env.NODE_ENV === 'production'
       ? ['log', 'error', 'warn']
       : ['log', 'error', 'warn', 'debug', 'verbose'];
+  private timer: Record<string, number> = {};
 
   constructor(
     context?: string,
@@ -45,5 +46,22 @@ export class MadifyLogger extends ConsoleLogger {
 
   warn(message: any, context?: unknown) {
     super.warn(message, this.formatContext(context));
+  }
+
+  time(message: any, context?: string) {
+    this.timer[JSON.stringify({ context, message })] = Date.now();
+  }
+
+  timeEnd(message: any, context?: string) {
+    const afterMs = Date.now();
+    const beforeMs = this.timer[JSON.stringify({ context, message })];
+
+    if (!beforeMs) return;
+
+    const time = afterMs - beforeMs;
+
+    delete this.timer[JSON.stringify({ context, message })];
+
+    super.log(message, this.formatContext(context, time));
   }
 }

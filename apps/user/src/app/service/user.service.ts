@@ -2,13 +2,13 @@ import {
   EntityVisibility,
   ICreateVehicle,
   IGetVehicleList,
-  IRepository,
+  IMongoRepository,
   IResponseProfile,
   IResponseVehicle,
   IUpdateProfile,
   Meta,
   PayloadResponse,
-  REPOSITORY_PROVIDE,
+  REPOSITORY_MONGO_PROVIDE,
   ResponseDto,
 } from '@madify-api/database';
 import { MadifyException } from '@madify-api/utils/exception';
@@ -20,12 +20,13 @@ import { UserService } from './user.abstract';
 @Injectable()
 export class UserImpl implements UserService {
   constructor(
-    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
+    @Inject(REPOSITORY_MONGO_PROVIDE)
+    private readonly repositoryMongo: IMongoRepository,
     @Inject(STORAGE_PROVIDE) private readonly storage: StorageService
   ) {}
 
   async getProfile(accountId: string): Promise<IResponseProfile> {
-    const account = await this.repository.findAccount({ id: accountId });
+    const account = await this.repositoryMongo.findAccount({ id: accountId });
     if (!account) {
       throw new MadifyException('NOT_FOUND_DATA');
     }
@@ -42,7 +43,7 @@ export class UserImpl implements UserService {
     body: IUpdateProfile,
     accountId: string
   ): Promise<IResponseProfile> {
-    const account = await this.repository.findAccount({ id: accountId });
+    const account = await this.repositoryMongo.findAccount({ id: accountId });
     if (!account) {
       throw new MadifyException('NOT_FOUND_DATA');
     }
@@ -57,7 +58,7 @@ export class UserImpl implements UserService {
     body: ICreateVehicle,
     accountId: string
   ): Promise<IResponseVehicle> {
-    const vehicle = await this.repository.createVehicle({
+    const vehicle = await this.repositoryMongo.createVehicle({
       ...body,
       accountId: new Types.ObjectId(accountId),
       visibility: EntityVisibility.Pending,
@@ -88,7 +89,7 @@ export class UserImpl implements UserService {
       limit: limit,
     };
 
-    const vehicles = await this.repository.findVehicles(
+    const vehicles = await this.repositoryMongo.findVehicles(
       { ...query, accountId },
       queryOptions
     );
@@ -97,13 +98,13 @@ export class UserImpl implements UserService {
       vehicles.map(async (vehicle) => {
         const [image, brand, model, province] = await Promise.all([
           this.storage.generateSignedUrl(vehicle.imageKey),
-          this.repository.findVehicleBrand({
+          this.repositoryMongo.findVehicleBrand({
             slug: vehicle.brand,
           }),
-          this.repository.findVehicleModel({
+          this.repositoryMongo.findVehicleModel({
             slug: vehicle.model,
           }),
-          this.repository.findProvince({
+          this.repositoryMongo.findProvince({
             slug: vehicle.registrationProvince,
           }),
         ]);

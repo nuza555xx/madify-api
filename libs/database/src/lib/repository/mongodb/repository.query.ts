@@ -1,9 +1,9 @@
 import { FilterQuery, Types } from 'mongoose';
-import { Account } from '../schema/account.schema';
-import { Province } from '../schema/province.model.schema';
-import { VehicleBrand } from '../schema/vehicle.brand.schema';
-import { VehicleModel } from '../schema/vehicle.model.schema';
-import { Vehicle } from '../schema/vehicle.schema';
+import { Account } from '../../schema/account.schema';
+import { Province } from '../../schema/province.model.schema';
+import { VehicleBrand } from '../../schema/vehicle.brand.schema';
+import { VehicleModel } from '../../schema/vehicle.model.schema';
+import { Vehicle } from '../../schema/vehicle.schema';
 import {
   AccountQuery,
   ProvinceQuery,

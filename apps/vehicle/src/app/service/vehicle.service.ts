@@ -1,23 +1,31 @@
+import { estypes } from '@elastic/elasticsearch';
 import {
   ICreateVehicle,
+  IElasticRepository,
   IGetVehicleList,
-  IRepository,
+  IMongoRepository,
   IResponseVehicle,
   Meta,
   PayloadResponse,
-  REPOSITORY_PROVIDE,
+  REPOSITORY_ELS_PROVIDE,
+  REPOSITORY_MONGO_PROVIDE,
   ResponseDto,
+  Sorting,
 } from '@madify-api/database';
+import { MadifyLogger } from '@madify-api/utils/common';
 import { MadifyException } from '@madify-api/utils/exception';
 import { STORAGE_PROVIDE, StorageService } from '@madify-api/utils/provider';
 import { Inject, Injectable } from '@nestjs/common';
-import { QueryOptions } from 'mongoose';
 import { VehicleService } from './vehicle.abstract';
 
 @Injectable()
 export class VehicleImpl implements VehicleService {
+  private readonly logger = new MadifyLogger(VehicleService.name);
   constructor(
-    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
+    @Inject(REPOSITORY_MONGO_PROVIDE)
+    private readonly repositoryMongo: IMongoRepository,
+    @Inject(REPOSITORY_ELS_PROVIDE)
+    private readonly repositoryElastic: IElasticRepository,
     @Inject(STORAGE_PROVIDE) private readonly storage: StorageService
   ) {}
 
@@ -25,7 +33,7 @@ export class VehicleImpl implements VehicleService {
     body: ICreateVehicle,
     accountId: string
   ): Promise<IResponseVehicle> {
-    const vehicle = await this.repository.createVehicle({
+    const vehicle = await this.repositoryMongo.createVehicle({
       ...body,
       accountId: accountId,
     });
@@ -38,32 +46,37 @@ export class VehicleImpl implements VehicleService {
   async listVehicle({
     skip = 0,
     limit,
+    sorting,
     ...query
   }: IGetVehicleList): Promise<ResponseDto<IResponseVehicle[]>> {
-    const queryOptions: QueryOptions = {
-      skip: skip,
-      limit: limit,
+    const queryOptions: estypes.SearchRequest = {
+      from: skip,
+      size: limit,
+      sort: `createdAt:${sorting ?? Sorting.ASC}`,
     };
 
-    const vehicles = await this.repository.findVehicles(
+    this.logger.time('Vehicle search');
+
+    const vehicles = await this.repositoryElastic.findVehicles(
       {
         ...query,
-        //  visibility: EntityVisibility.Publish
       },
       queryOptions
     );
+
+    this.logger.timeEnd('Vehicle search');
 
     const vehiclesResponse = await Promise.all(
       vehicles.map(async (vehicle) => {
         const [image, brand, model, province] = await Promise.all([
           this.storage.generateSignedUrl(vehicle.imageKey),
-          this.repository.findVehicleBrand({
+          this.repositoryMongo.findVehicleBrand({
             slug: vehicle.brand,
           }),
-          this.repository.findVehicleModel({
+          this.repositoryMongo.findVehicleModel({
             slug: vehicle.model,
           }),
-          this.repository.findProvince({
+          this.repositoryMongo.findProvince({
             slug: vehicle.registrationProvince,
           }),
         ]);

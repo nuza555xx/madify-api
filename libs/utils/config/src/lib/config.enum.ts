@@ -13,3 +13,7 @@ export enum ConfigKey {
   THROTTLER = 'throttler',
   STORAGE = 'storage',
 }
+
+export enum ElasticsearchIndexes {
+  VEHICLE = 'vehicles',
+}
