@@ -1,22 +1,23 @@
+import compression from '@fastify/compress';
+import fastifyCsrf from '@fastify/csrf-protection';
+import fastifyHelmet from '@fastify/helmet';
+
+import { Documentation, getHelmetOptions } from '@madify-api/utils/common';
+import { APIPrefix } from '@madify-api/utils/config';
+import { MadifyExceptionFilter } from '@madify-api/utils/exception';
+import { MadifyRestLogger } from '@madify-api/utils/interceptor';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import fastifyHelmet from '@fastify/helmet';
-import fastifyCsrf from '@fastify/csrf-protection';
-import compression from '@fastify/compress';
-import { APIPrefix } from '@madify-api/config';
-import { Documentation, getHelmetOptions } from '@madify-api/common';
-import { MadifyExceptionFilter } from '@madify-api/exception';
-import { MadifyRestLogger } from '@madify-api/interceptor';
 import { startCase } from 'lodash';
 import { AuthenticationModule } from './app/authentication.module';
 
 async function bootstrap() {
   const prefix = APIPrefix.AUTHENTICATION;
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3001;
   const fastifyAdapter = new FastifyAdapter();
   const app = await NestFactory.create<NestFastifyApplication>(
     AuthenticationModule,

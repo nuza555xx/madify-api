@@ -5,3 +5,12 @@ export * from './lib/schema/vehicle.brand.schema';
 export * from './lib/schema/vehicle.model.schema';
 export * from './lib/repository/repository.abstract';
 export * from './lib/repository/repository.payload';
+
+export * from './lib/enum/account.enum';
+export * from './lib/enum/base.enum';
+export * from './lib/enum/user.enum';
+
+export * from './lib/interface/account.interface';
+export * from './lib/interface/global.interface';
+export * from './lib/interface/redis.interface';
+export * from './lib/interface/vehicle.interface';

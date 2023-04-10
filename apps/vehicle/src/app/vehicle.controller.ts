@@ -1,12 +1,21 @@
-import { APIPrefix, RedisCacheKey } from '@madify-api/config';
-import { MadifySharedCached, MadifyController } from '@madify-api/decorator';
+import { APIPrefix, RedisCacheKey } from '@madify-api/utils/config';
+import {
+  MadifyController,
+  MadifySharedCached,
+} from '@madify-api/utils/decorator';
+import { Get, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import { GetSearchVehicleQuery } from './dto/vehicle.dto';
 import { VehicleService } from './service/vehicle.abstract';
-import { Get, Query } from '@nestjs/common';
-import { GetSearchVehicleQuery } from './vehicle.dto';
 
 @MadifyController({ path: APIPrefix.VEHICLE })
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
+
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  healthCheck(): boolean {
+    return true;
+  }
 
   @Get('search')
   @MadifySharedCached(RedisCacheKey.VEHICLE)

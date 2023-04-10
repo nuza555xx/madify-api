@@ -1,5 +1,6 @@
-import { AcceptPlatform, EntityVisibility } from '@madify-api/enum';
 import { QuerySelector, RootQuerySelector } from 'mongoose';
+import { EntityVisibility } from '../enum/base.enum';
+import { AcceptPlatform, SocialProvider } from '../enum/user.enum';
 
 export type AccountQuery = {
   id?: string;
@@ -16,6 +17,10 @@ export type AccountQuery = {
     accessTokenExpiration?: QuerySelector<Date>;
     refreshToken?: string;
     refreshTokenExpiration?: QuerySelector<Date>;
+  };
+  authentication?: {
+    socialId?: string;
+    provider?: SocialProvider;
   };
 };
 

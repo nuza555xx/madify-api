@@ -1,24 +1,39 @@
-import { Body, Get, Param, Post, Put, Query } from '@nestjs/common';
-import {
-  GetProfileParams,
-  UpdateProfileDto,
-  CreateVehicleDto,
-  GetVehicleListQuery,
-} from './user.dto';
-import { IResponseProfile, IResponseVehicle } from '@madify-api/interface';
+import { IResponseProfile, IResponseVehicle } from '@madify-api/database';
+import { APIPrefix, RedisCacheKey } from '@madify-api/utils/config';
 import {
   Auth,
   Authorizer,
   MadifyAuthorize,
   MadifyAuthorizeAndClearCached,
   MadifyController,
-} from '@madify-api/decorator';
+} from '@madify-api/utils/decorator';
+import {
+  Body,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import {
+  CreateVehicleDto,
+  GetProfileParams,
+  GetVehicleListQuery,
+  UpdateProfileDto,
+} from './dto/user.dto';
 import { UserService } from './service/user.abstract';
-import { APIPrefix, RedisCacheKey } from '@madify-api/config';
 
 @MadifyController({ path: APIPrefix.USER })
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  healthCheck(): boolean {
+    return true;
+  }
 
   @Get(':accountId')
   @MadifyAuthorize(RedisCacheKey.USER)

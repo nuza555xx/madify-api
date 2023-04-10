@@ -1,28 +1,31 @@
-import { AuthenticationService } from './authentication.abstract';
-import { CONFIG_PROVIDE, ConfigKey } from '@madify-api/config';
-import { ConfigService } from '@nestjs/config';
-import { DateTime } from 'luxon';
 import {
+  Account,
   IGenerateToken,
-  IJwtConfig,
   ILoginWithEmail,
+  ILoginWithSocial,
   IRefreshToken,
   IRegisterFirebase,
   IRegisterWithEmail,
+  IRegisterWithSocial,
+  IRepository,
   IResponseLogin,
-} from '@madify-api/interface';
-import { Injectable, HttpStatus, Inject } from '@nestjs/common';
-import { Account, IRepository, REPOSITORY_PROVIDE } from '@madify-api/database';
-import { JWT_PROVIDE, TokenService } from '@madify-api/jwt';
-import { MadifyException } from '@madify-api/exception';
-import { MadifyHash } from '@madify-api/common';
+  REPOSITORY_PROVIDE,
+} from '@madify-api/database';
+import { MadifyHash } from '@madify-api/utils/common';
+import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
+import { MadifyException } from '@madify-api/utils/exception';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { DateTime } from 'luxon';
+import { AuthenticationService } from './authentication.abstract';
 
 @Injectable()
 export class AuthenticationImpl implements AuthenticationService {
   constructor(
     @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
-    @Inject(JWT_PROVIDE) private readonly tokenService: TokenService,
-    @Inject(CONFIG_PROVIDE) private readonly configService: ConfigService
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
 
   private async generateAllToken(account: Account): Promise<IGenerateToken> {
@@ -38,11 +41,11 @@ export class AuthenticationImpl implements AuthenticationService {
       .toJSDate();
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.tokenService.generate(
+      this.jwtService.signAsync(
         { id: account._id, expirationDate: accessTokenExpiration },
         { expiresIn: accessTokenExpiresIn, secret }
       ),
-      this.tokenService.generate(
+      this.jwtService.signAsync(
         {
           id: account._id,
           expirationDate: refreshTokenExpiration,
@@ -87,6 +90,39 @@ export class AuthenticationImpl implements AuthenticationService {
     };
   }
 
+  async registerWithSocial({
+    socialId,
+    provider,
+    authToken,
+    image,
+    ...dto
+  }: IRegisterWithSocial): Promise<IResponseLogin> {
+    if (![dto.platform, dto.uuid].every((exists) => exists))
+      throw new MadifyException('MISSING_METADATA_HEADERS');
+    let account = await this.repository.findAccount({ email: dto.email });
+    if (!account) {
+      account = await this.repository.createAccount(dto);
+      if (!account) throw new MadifyException('NOT_FOUND_DATA');
+    }
+    const token = await this.generateAllToken(account);
+    (account.authentications ??= []).push({
+      socialId,
+      provider,
+      authToken,
+      image,
+    });
+    (account.credentials ??= []).push({
+      platform: dto.platform,
+      uuid: dto.uuid,
+      ...token,
+    });
+    await account.save();
+    return {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+    };
+  }
+
   async loginWithEmail(dto: ILoginWithEmail): Promise<IResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
@@ -102,7 +138,7 @@ export class AuthenticationImpl implements AuthenticationService {
     }
 
     const token = await this.generateAllToken(account);
-    let credential = account.credentials.find(
+    const credential = account.credentials.find(
       ({ uuid, platform }) => dto.uuid === uuid && dto.platform === platform
     );
 
@@ -138,6 +174,95 @@ export class AuthenticationImpl implements AuthenticationService {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
     };
+  }
+
+  async loginWithSocial({
+    socialId,
+    provider,
+    authToken,
+    image,
+    ...dto
+  }: ILoginWithSocial): Promise<IResponseLogin> {
+    if (![dto.platform, dto.uuid].every((exists) => exists))
+      throw new MadifyException('MISSING_METADATA_HEADERS');
+
+    const account = await this.repository.findAccount({
+      email: dto.email,
+      authentication: {
+        socialId: socialId,
+        provider: provider,
+      },
+    });
+    if (!account) {
+      throw new MadifyException('NOT_FOUND_DATA');
+    }
+
+    const token = await this.generateAllToken(account);
+    const credential = account.credentials.find(
+      ({ uuid, platform }) => dto.uuid === uuid && dto.platform === platform
+    );
+
+    if (credential) {
+      await this.repository.updateAccount(
+        {
+          id: account._id,
+          credentials: {
+            platform: dto.platform,
+            uuid: dto.uuid,
+          },
+        },
+        {
+          $set: {
+            'credentials.$': {
+              platform: dto.platform,
+              uuid: dto.uuid,
+              ...token,
+            },
+          },
+        }
+      );
+    } else {
+      (account.credentials ??= []).push({
+        platform: dto.platform,
+        uuid: dto.uuid,
+        ...token,
+      });
+      await account.save();
+    }
+
+    return {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+    };
+    // if (![dto.platform, dto.uuid].every((exists) => exists))
+    //   throw new MadifyException('MISSING_METADATA_HEADERS');
+
+    // let account = await this.repository.findAccount({ email: dto.email });
+    // if (!account) {
+    //   account = await this.repository.createAccount(dto);
+    //   if (!account) throw new MadifyException('NOT_FOUND_DATA');
+    // }
+
+    // const token = await this.generateAllToken(account);
+
+    // (account.authentications ??= []).push({
+    //   socialId,
+    //   provider,
+    //   authToken,
+    //   image,
+    // });
+
+    // (account.credentials ??= []).push({
+    //   platform: dto.platform,
+    //   uuid: dto.uuid,
+    //   ...token,
+    // });
+    // await account.save();
+
+    // return {
+    //   accessToken: token.accessToken,
+    //   refreshToken: token.refreshToken,
+    // };
   }
 
   async registerToken(
@@ -176,7 +301,7 @@ export class AuthenticationImpl implements AuthenticationService {
 
     const { secret } = this.configService.get<IJwtConfig>(ConfigKey.JWT);
 
-    const decode = this.tokenService.isVerify(dto.refreshToken, { secret });
+    const decode = this.jwtService.verify(dto.refreshToken, { secret });
 
     const account = await this.repository.findAccount({
       id: decode.id,

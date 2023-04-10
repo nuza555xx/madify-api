@@ -1,5 +1,5 @@
-import { Body, Delete, Post } from '@nestjs/common';
-
+import { IResponseLogin, RequestMetadata } from '@madify-api/database';
+import { APIPrefix } from '@madify-api/utils/config';
 import {
   Auth,
   Authorizer,
@@ -8,21 +8,27 @@ import {
   MadifyController,
   MadifySwaggerHeaderAuth,
   RequestMeta,
-  RequestMetadata,
-} from '@madify-api/decorator';
-import { APIPrefix } from '@madify-api/config';
+} from '@madify-api/utils/decorator';
+import { Body, Delete, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   LoginWithEmailDto,
+  LoginWithSocialDto,
   RegisterFirebaseDto,
   RegisterWithEmailDto,
-} from './authentication.dto';
-import { IResponseLogin } from '@madify-api/interface';
+  RegisterWithSocialDto,
+} from './dto/authentication.dto';
 import { AuthenticationService } from './service/authentication.abstract';
-import { ApiBearerAuth } from '@nestjs/swagger';
 
 @MadifyController({ path: APIPrefix.AUTHENTICATION })
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
+
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  healthCheck(): boolean {
+    return true;
+  }
 
   @MadifySwaggerHeaderAuth()
   @Post('register-with-email')
@@ -39,12 +45,40 @@ export class AuthenticationController {
   }
 
   @MadifySwaggerHeaderAuth()
+  @Post('register-with-social')
+  registerWithSocial(
+    @RequestMeta() { ip, platform, uuid }: RequestMetadata,
+    @Body() dto: RegisterWithSocialDto
+  ): Promise<IResponseLogin> {
+    return this.authService.registerWithSocial({
+      ...dto,
+      ip,
+      platform,
+      uuid,
+    });
+  }
+
+  @MadifySwaggerHeaderAuth()
   @Post('login-with-email')
   loginWithEmail(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: LoginWithEmailDto
   ): Promise<IResponseLogin> {
     return this.authService.loginWithEmail({
+      ...dto,
+      ip,
+      platform,
+      uuid,
+    });
+  }
+
+  @MadifySwaggerHeaderAuth()
+  @Post('login-with-social')
+  loginWithSocial(
+    @RequestMeta() { ip, platform, uuid }: RequestMetadata,
+    @Body() dto: LoginWithSocialDto
+  ): Promise<IResponseLogin> {
+    return this.authService.loginWithSocial({
       ...dto,
       ip,
       platform,

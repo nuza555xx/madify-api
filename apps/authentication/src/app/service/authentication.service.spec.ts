@@ -1,6 +1,6 @@
+import { Test } from '@nestjs/testing';
 import { AuthenticationService } from './authentication.abstract';
 import { AuthenticationImpl } from './authentication.service';
-import { Test } from '@nestjs/testing';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;

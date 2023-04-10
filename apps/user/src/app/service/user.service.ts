@@ -1,24 +1,21 @@
 import {
+  EntityVisibility,
   ICreateVehicle,
   IGetVehicleList,
+  IRepository,
   IResponseProfile,
   IResponseVehicle,
   IUpdateProfile,
   Meta,
-  ResponseDto,
-} from '@madify-api/interface';
-import {
-  REPOSITORY_PROVIDE,
-  IRepository,
   PayloadResponse,
+  REPOSITORY_PROVIDE,
+  ResponseDto,
 } from '@madify-api/database';
+import { MadifyException } from '@madify-api/utils/exception';
+import { STORAGE_PROVIDE, StorageService } from '@madify-api/utils/provider';
 import { Inject, Injectable } from '@nestjs/common';
-import { UserService } from './user.abstract';
-import { MadifyException } from '@madify-api/exception';
 import { QueryOptions, Types } from 'mongoose';
-import { MadifyPagination } from '@madify-api/common';
-import { EntityVisibility } from '@madify-api/enum';
-import { STORAGE_PROVIDE, StorageService } from '@madify-api/gcp';
+import { UserService } from './user.abstract';
 
 @Injectable()
 export class UserImpl implements UserService {
@@ -34,6 +31,7 @@ export class UserImpl implements UserService {
     }
 
     return {
+      id: account.id,
       email: account.email,
       displayName: account.displayName,
       mobile: account.mobile,

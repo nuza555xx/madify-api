@@ -1,20 +1,22 @@
-import { AuthenticationController } from './authentication.controller';
-import { AuthenticationImpl } from './service/authentication.service';
-import { AuthenticationService } from './service/authentication.abstract';
-import { MadifyConfigModule } from '@madify-api/config';
 import { MadifyDatabaseModule } from '@madify-api/database';
-import { MadifyJwtModule } from '@madify-api/jwt';
-import { MadifyThrottlerModule } from '@madify-api/module';
+import { MadifyConfigModule } from '@madify-api/utils/config';
+import { MadifyUtilsInterceptorModule } from '@madify-api/utils/interceptor';
+import {
+  MadifyJwtConfigModule,
+  MadifyThrottlerModule,
+} from '@madify-api/utils/module';
 import { Module } from '@nestjs/common';
-import { MadifyInterceptorsModule } from '@madify-api/interceptor';
+import { AuthenticationController } from './authentication.controller';
+import { AuthenticationService } from './service/authentication.abstract';
+import { AuthenticationImpl } from './service/authentication.service';
 
 @Module({
   imports: [
     MadifyConfigModule,
     MadifyDatabaseModule,
-    MadifyJwtModule,
+    MadifyJwtConfigModule,
     MadifyThrottlerModule,
-    MadifyInterceptorsModule,
+    MadifyUtilsInterceptorModule,
   ],
   controllers: [AuthenticationController],
   providers: [

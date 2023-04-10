@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema } from './base.schema';
 import { SchemaTypes, Types } from 'mongoose';
+import { BaseSchema } from './base.schema';
 
 @Schema({ timestamps: true })
 export class Vehicle extends BaseSchema {

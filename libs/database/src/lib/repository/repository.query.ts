@@ -1,5 +1,9 @@
 import { FilterQuery, Types } from 'mongoose';
 import { Account } from '../schema/account.schema';
+import { Province } from '../schema/province.model.schema';
+import { VehicleBrand } from '../schema/vehicle.brand.schema';
+import { VehicleModel } from '../schema/vehicle.model.schema';
+import { Vehicle } from '../schema/vehicle.schema';
 import {
   AccountQuery,
   ProvinceQuery,
@@ -7,10 +11,6 @@ import {
   VehicleModelQuery,
   VehicleQuery,
 } from './repository.interface';
-import { Vehicle } from '../schema/vehicle.schema';
-import { VehicleBrand } from '../schema/vehicle.brand.schema';
-import { VehicleModel } from '../schema/vehicle.model.schema';
-import { Province } from '../schema/province.model.schema';
 
 export class PrepareQuery {
   findAccountFilters(query: AccountQuery): FilterQuery<Account> {
@@ -45,6 +45,12 @@ export class PrepareQuery {
 
     if (query?.devices?.platform)
       filters['devices.platform'] = query.devices.platform;
+
+    if (query?.authentication?.socialId)
+      filters['authentication.socialId'] = query?.authentication?.socialId;
+
+    if (query?.authentication?.provider)
+      filters['authentication.provider'] = query?.authentication?.provider;
 
     return filters;
   }

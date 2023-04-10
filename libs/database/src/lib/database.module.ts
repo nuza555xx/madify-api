@@ -1,10 +1,10 @@
+import { MadifyMongooseModule } from '@madify-api/utils/module';
 import { Module } from '@nestjs/common';
-import { MadifyMongooseModule } from '@madify-api/module';
-import { RepositoryImpl } from './repository/repository.service';
 import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
+import { RepositoryImpl } from './repository/repository.service';
 import { Account, AccountSchema } from './schema/account.schema';
-import { Vehicle, VehicleSchema } from './schema/vehicle.schema';
 import { Otp, OtpSchema } from './schema/otp.schema';
+import { Province, ProvinceSchema } from './schema/province.model.schema';
 import {
   VehicleBrand,
   VehicleBrandSchema,
@@ -13,7 +13,7 @@ import {
   VehicleModel,
   VehicleModelSchema,
 } from './schema/vehicle.model.schema';
-import { Province, ProvinceSchema } from './schema/province.model.schema';
+import { Vehicle, VehicleSchema } from './schema/vehicle.schema';
 
 const modelDefinitions: ModelDefinition[] = [
   {
