@@ -1,7 +1,11 @@
-import { MadifyMongooseModule } from '@madify-api/utils/module';
+import {
+  MadifyElasticsearchModule,
+  MadifyMongooseModule,
+} from '@madify-api/utils/module';
 import { Module } from '@nestjs/common';
 import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
-import { RepositoryImpl } from './repository/repository.service';
+import { RepositoryElasticImpl } from './repository/elasticsearch/repository.service';
+import { RepositoryMongoImpl } from './repository/mongodb/repository.service';
 import { Account, AccountSchema } from './schema/account.schema';
 import { Otp, OtpSchema } from './schema/otp.schema';
 import { Province, ProvinceSchema } from './schema/province.model.schema';
@@ -42,16 +46,25 @@ const modelDefinitions: ModelDefinition[] = [
   },
 ];
 
-export const REPOSITORY_PROVIDE = 'repository';
+export const REPOSITORY_MONGO_PROVIDE = 'repository-mongo';
+export const REPOSITORY_ELS_PROVIDE = 'repository-elasticsearch';
 
 @Module({
-  imports: [MadifyMongooseModule, MongooseModule.forFeature(modelDefinitions)],
+  imports: [
+    MadifyMongooseModule,
+    MadifyElasticsearchModule,
+    MongooseModule.forFeature(modelDefinitions),
+  ],
   providers: [
     {
-      provide: REPOSITORY_PROVIDE,
-      useClass: RepositoryImpl,
+      provide: REPOSITORY_MONGO_PROVIDE,
+      useClass: RepositoryMongoImpl,
+    },
+    {
+      provide: REPOSITORY_ELS_PROVIDE,
+      useClass: RepositoryElasticImpl,
     },
   ],
-  exports: [REPOSITORY_PROVIDE],
+  exports: [REPOSITORY_MONGO_PROVIDE, REPOSITORY_ELS_PROVIDE],
 })
 export class MadifyDatabaseModule {}

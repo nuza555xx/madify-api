@@ -56,5 +56,5 @@ export class GetSearchVehicleQuery {
   })
   @IsOptional()
   @IsEnum(Sorting)
-  sorting: Sorting;
+  sorting?: Sorting;
 }
