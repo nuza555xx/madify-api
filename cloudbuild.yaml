@@ -43,8 +43,7 @@ steps:
         '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest']
+    args: ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -70,8 +69,7 @@ steps:
         '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest']
+    args: ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -86,8 +84,11 @@ steps:
         '--allow-unauthenticated',
       ]
 
+logsBucket: 'gs://buildlogging'
+options:
+  logging: GCS_ONLY
+
 images:
   - 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest'
   - 'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest'
   - 'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest'
-

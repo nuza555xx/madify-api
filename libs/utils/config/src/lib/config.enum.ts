@@ -1,7 +1,7 @@
 export enum APIPrefix {
-  AUTHENTICATION = 'authentication',
-  USER = 'user',
-  VEHICLE = 'vehicle',
+  AUTHENTICATION = 'api/authentication',
+  USER = 'api/user',
+  VEHICLE = 'api/vehicle',
 }
 
 export enum ConfigKey {
