@@ -3,13 +3,13 @@ import {
   IGenerateToken,
   ILoginWithEmail,
   ILoginWithSocial,
+  IMongoRepository,
   IRefreshToken,
   IRegisterFirebase,
   IRegisterWithEmail,
   IRegisterWithSocial,
-  IRepository,
   IResponseLogin,
-  REPOSITORY_PROVIDE,
+  REPOSITORY_MONGO_PROVIDE,
 } from '@madify-api/database';
 import { MadifyHash } from '@madify-api/utils/common';
 import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
@@ -23,7 +23,8 @@ import { AuthenticationService } from './authentication.abstract';
 @Injectable()
 export class AuthenticationImpl implements AuthenticationService {
   constructor(
-    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
+    @Inject(REPOSITORY_MONGO_PROVIDE)
+    private readonly repositoryMongo: IMongoRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {}
@@ -69,10 +70,10 @@ export class AuthenticationImpl implements AuthenticationService {
 
     dto.password = await MadifyHash.hash(dto.password);
 
-    const isExists = await this.repository.findAccount(dto);
+    const isExists = await this.repositoryMongo.findAccount(dto);
     if (isExists) throw new MadifyException('DUPLICATE_EMAIL');
 
-    const account = await this.repository.createAccount(dto);
+    const account = await this.repositoryMongo.createAccount(dto);
     if (!account) throw new MadifyException('NOT_FOUND_DATA');
 
     const token = await this.generateAllToken(account);
@@ -99,9 +100,9 @@ export class AuthenticationImpl implements AuthenticationService {
   }: IRegisterWithSocial): Promise<IResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
-    let account = await this.repository.findAccount({ email: dto.email });
+    let account = await this.repositoryMongo.findAccount({ email: dto.email });
     if (!account) {
-      account = await this.repository.createAccount(dto);
+      account = await this.repositoryMongo.createAccount(dto);
       if (!account) throw new MadifyException('NOT_FOUND_DATA');
     }
     const token = await this.generateAllToken(account);
@@ -127,7 +128,7 @@ export class AuthenticationImpl implements AuthenticationService {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
 
-    const account = await this.repository.findAccount(dto);
+    const account = await this.repositoryMongo.findAccount(dto);
     if (!account) {
       throw new MadifyException('NOT_FOUND_DATA');
     }
@@ -143,7 +144,7 @@ export class AuthenticationImpl implements AuthenticationService {
     );
 
     if (credential) {
-      await this.repository.updateAccount(
+      await this.repositoryMongo.updateAccount(
         {
           id: account._id,
           credentials: {
@@ -186,7 +187,7 @@ export class AuthenticationImpl implements AuthenticationService {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
 
-    const account = await this.repository.findAccount({
+    const account = await this.repositoryMongo.findAccount({
       email: dto.email,
       authentication: {
         socialId: socialId,
@@ -203,7 +204,7 @@ export class AuthenticationImpl implements AuthenticationService {
     );
 
     if (credential) {
-      await this.repository.updateAccount(
+      await this.repositoryMongo.updateAccount(
         {
           id: account._id,
           credentials: {
@@ -237,9 +238,9 @@ export class AuthenticationImpl implements AuthenticationService {
     // if (![dto.platform, dto.uuid].every((exists) => exists))
     //   throw new MadifyException('MISSING_METADATA_HEADERS');
 
-    // let account = await this.repository.findAccount({ email: dto.email });
+    // let account = await this.repositoryMongo.findAccount({ email: dto.email });
     // if (!account) {
-    //   account = await this.repository.createAccount(dto);
+    //   account = await this.repositoryMongo.createAccount(dto);
     //   if (!account) throw new MadifyException('NOT_FOUND_DATA');
     // }
 
@@ -281,7 +282,7 @@ export class AuthenticationImpl implements AuthenticationService {
   }
 
   async unregisterToken(body: IRegisterFirebase, account: Account) {
-    await this.repository.updateAccount(
+    await this.repositoryMongo.updateAccount(
       { id: account._id },
       {
         $pull: {
@@ -303,7 +304,7 @@ export class AuthenticationImpl implements AuthenticationService {
 
     const decode = this.jwtService.verify(dto.refreshToken, { secret });
 
-    const account = await this.repository.findAccount({
+    const account = await this.repositoryMongo.findAccount({
       id: decode.id,
       credentials: {
         refreshToken: dto.refreshToken,
@@ -323,7 +324,7 @@ export class AuthenticationImpl implements AuthenticationService {
 
     const token = await this.generateAllToken(account);
 
-    await this.repository.updateAccount(
+    await this.repositoryMongo.updateAccount(
       {
         id: account._id,
         credentials: {

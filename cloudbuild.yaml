@@ -10,14 +10,17 @@ steps:
       [
         'build',
         '-t',
-        'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/authentication:latest',
         '-f',
         './Dockerfile.authentication',
         '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest']
+      [
+        'push',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/authentication:latest',
+      ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -26,7 +29,7 @@ steps:
         'deploy',
         'authentication',
         '--image',
-        'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/authentication:latest',
         '--region',
         'asia-southeast1',
         '--allow-unauthenticated',
@@ -37,13 +40,17 @@ steps:
       [
         'build',
         '-t',
-        'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/user:latest',
         '-f',
         './Dockerfile.user',
         '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest']
+    args:
+      [
+        'push',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/user:latest',
+      ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -52,7 +59,7 @@ steps:
         'deploy',
         'user',
         '--image',
-        'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/user:latest',
         '--region',
         'asia-southeast1',
         '--allow-unauthenticated',
@@ -63,13 +70,17 @@ steps:
       [
         'build',
         '-t',
-        'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/vehicle:latest',
         '-f',
         './Dockerfile.vehicle',
         '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest']
+    args:
+      [
+        'push',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/vehicle:latest',
+      ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -78,7 +89,7 @@ steps:
         'deploy',
         'vehicle',
         '--image',
-        'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest',
+        'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/vehicle:latest',
         '--region',
         'asia-southeast1',
         '--allow-unauthenticated',
@@ -89,6 +100,6 @@ options:
   logging: GCS_ONLY
 
 images:
-  - 'asia-docker.pkg.dev/$PROJECT_ID/madify/authentication:latest'
-  - 'asia-docker.pkg.dev/$PROJECT_ID/madify/user:latest'
-  - 'asia-docker.pkg.dev/$PROJECT_ID/madify/vehicle:latest'
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/authentication:latest'
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/user:latest'
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/madify-2/vehicle:latest'

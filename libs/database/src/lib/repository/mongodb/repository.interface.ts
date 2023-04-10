@@ -1,6 +1,6 @@
 import { QuerySelector, RootQuerySelector } from 'mongoose';
-import { EntityVisibility } from '../enum/base.enum';
-import { AcceptPlatform, SocialProvider } from '../enum/user.enum';
+import { EntityVisibility } from '../../enum/base.enum';
+import { AcceptPlatform, SocialProvider } from '../../enum/user.enum';
 
 export type AccountQuery = {
   id?: string;

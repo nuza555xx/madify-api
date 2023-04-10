@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { elasticsearchConfig } from './register/elasticsearch.config';
 import { jwtConfig } from './register/jwt.config';
 import { mongooseConfig } from './register/mongoose.config';
 import { redisCacheConfig, redisStoreConfig } from './register/redis.config';
@@ -17,6 +18,7 @@ import { throttlerConfig } from './register/throttler.config';
         redisStoreConfig,
         storageConfig,
         throttlerConfig,
+        elasticsearchConfig,
       ],
     }),
   ],

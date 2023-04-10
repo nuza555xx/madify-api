@@ -8,14 +8,14 @@ import {
   UpdateQuery,
   UpdateWriteOpResult,
 } from 'mongoose';
-import { Account } from '../schema/account.schema';
-import { Otp } from '../schema/otp.schema';
-import { Province } from '../schema/province.model.schema';
-import { VehicleBrand } from '../schema/vehicle.brand.schema';
-import { VehicleModel } from '../schema/vehicle.model.schema';
-import { Vehicle } from './../schema/vehicle.schema';
+import { Account } from '../../schema/account.schema';
+import { Otp } from '../../schema/otp.schema';
+import { Province } from '../../schema/province.model.schema';
+import { VehicleBrand } from '../../schema/vehicle.brand.schema';
+import { VehicleModel } from '../../schema/vehicle.model.schema';
+import { Vehicle } from '../../schema/vehicle.schema';
 import {
-  IRepository,
+  IMongoRepository,
   ResultAccount,
   ResultProvince,
   ResultVehicle,
@@ -25,7 +25,7 @@ import {
 import { PrepareQuery } from './repository.query';
 
 @Injectable()
-export class RepositoryImpl implements IRepository {
+export class RepositoryMongoImpl implements IMongoRepository {
   private filters = new PrepareQuery();
   constructor(
     @InjectModel(Account.name) private accountModel: Model<Account>,

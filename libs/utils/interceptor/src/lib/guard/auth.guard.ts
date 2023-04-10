@@ -1,8 +1,8 @@
 import {
   Account,
   EntityVisibility,
-  IRepository,
-  REPOSITORY_PROVIDE,
+  IMongoRepository,
+  REPOSITORY_MONGO_PROVIDE,
 } from '@madify-api/database';
 import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
 import { MadifyException } from '@madify-api/utils/exception';
@@ -30,7 +30,8 @@ export class AuthGuard implements CanActivate {
   private jwtToken = this.configService.get<IJwtConfig>(ConfigKey.JWT);
 
   constructor(
-    @Inject(REPOSITORY_PROVIDE) private readonly repository: IRepository,
+    @Inject(REPOSITORY_MONGO_PROVIDE)
+    private readonly repository: IMongoRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {}
