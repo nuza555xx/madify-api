@@ -1,0 +1,36 @@
+steps:
+  - name: 'node:18-alpine'
+    entrypoint: 'npm'
+    args: ['install']
+  - name: 'node:18-alpine'
+    entrypoint: 'npm'
+    args: ['run', 'build:all']
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/vehicle:latest',
+        '-f',
+        './Dockerfile.vehicle',
+        '.',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/vehicle:latest']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run',
+        'deploy',
+        'vehicle',
+        '--image',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/vehicle:latest',
+        '--platform=managed',
+        '--region=asia-southeast1',
+        '--allow-unauthenticated',
+      ]
+
+logsBucket: 'gs://buildlogging'
+options:
+  logging: GCS_ONLY
