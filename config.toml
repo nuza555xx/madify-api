@@ -1,0 +1,29 @@
+mongo-url = "mongodb+srv://admin:Lq2b9PmD1JNOZXpJ@madiify.iecvqit.mongodb.net/?retryWrites=true&w=majority"
+elasticsearch-urls = ["https://madify.es.asia-southeast1.gcp.elastic-cloud.com"]
+
+gzip = true
+stats = true
+index-stats = true
+index-as-update=true
+
+elasticsearch-user = "elastic"
+elasticsearch-password = "4yUePcoBvxT02eZWqLMuznhv"
+
+elasticsearch-max-conns = 10
+elasticsearch-max-seconds = 5
+elasticsearch-max-bytes = 8000000
+
+dropped-collections = true
+dropped-databases = true
+
+resume = true
+resume-write-unsafe = true
+resume-name = "default"
+verbose = true
+
+direct-read-namespaces = ["dev.vehicles"]
+
+
+[[mapping]]
+namespace = "dev.vehicles"
+index = "vehicles"

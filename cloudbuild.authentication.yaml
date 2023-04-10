@@ -10,16 +10,16 @@ steps:
       [
         'build',
         '-t',
-        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/{_SERVICE_NAME}:latest',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:latest',
         '-f',
-        './Dockerfile.{_SERVICE_NAME}',
+        './Dockerfile.${_SERVICE_NAME}',
         '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
         'push',
-        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/{_SERVICE_NAME}:latest',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:latest',
       ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -27,9 +27,9 @@ steps:
       [
         'run',
         'deploy',
-        '{_SERVICE_NAME}',
+        '${_SERVICE_NAME}',
         '--image',
-        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/{_SERVICE_NAME}:latest',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:latest',
         '--platform=managed',
         '--region=asia-southeast1',
         '--allow-unauthenticated',
