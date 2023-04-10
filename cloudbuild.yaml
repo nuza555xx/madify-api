@@ -1,26 +1,26 @@
 steps:
-  # - name: 'node:18-alpine'
-  #   entrypoint: 'npm'
-  #   args: ['install']
-  # - name: 'node:18-alpine'
-  #   entrypoint: 'npm'
-  #   args: ['run', 'build:all']
-  # - name: 'gcr.io/cloud-builders/docker'
-  #   args:
-  #     [
-  #       'build',
-  #       '-t',
-  #       '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/authentication:latest',
-  #       '-f',
-  #       './Dockerfile.authentication',
-  #       '.',
-  #     ]
-  # - name: 'gcr.io/cloud-builders/docker'
-  #   args:
-  #     [
-  #       'push',
-  #       '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/authentication:latest',
-  #     ]
+  - name: 'node:18-alpine'
+    entrypoint: 'npm'
+    args: ['install']
+  - name: 'node:18-alpine'
+    entrypoint: 'npm'
+    args: ['run', 'build:all']
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/authentication:latest',
+        '-f',
+        './Dockerfile.authentication',
+        '.',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/authentication:latest',
+      ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -32,7 +32,7 @@ steps:
         '${_REPO_REGION}/$PROJECT_ID/${_REPO_NAME}/authentication:latest',
         '--platform=managed',
         '--region=asia-southeast1',
-        # '--service-account=${_SERVICE_ACCOUNT_EMAIL}',
+        '--service-account=${_SERVICE_ACCOUNT_EMAIL}',
         '--allow-unauthenticated',
       ]
 
