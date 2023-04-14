@@ -11,7 +11,7 @@ export class VehicleBrand extends BaseSchema {
   slug: string;
 
   @Prop({ type: SchemaTypes.String })
-  imageKey?: string;
+  imageKey: string;
 }
 
 export const VehicleBrandSchema = SchemaFactory.createForClass(VehicleBrand)

@@ -24,6 +24,7 @@ import { inspect } from 'util';
           th: SchemaTypes.String,
           en: SchemaTypes.String,
         },
+        imageKey: SchemaTypes.String,
       },
       { timestamps: true }
     )
@@ -51,7 +52,11 @@ import { inspect } from 'util';
             en: e,
             th: null,
           },
-          slug: e.toLowerCase().trim().replace(/\s/g, '_'),
+          slug: e.toLowerCase().trim().replace(/\s|-/g, '_'),
+          imageKey: `madify/static/brand-car/${e
+            .toLowerCase()
+            .trim()
+            .replace(/\s|-/g, '_')}_logo.png`,
         };
       }),
       { ordered: true }

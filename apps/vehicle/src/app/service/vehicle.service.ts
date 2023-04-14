@@ -81,9 +81,11 @@ export class VehicleImpl implements VehicleService {
           }),
         ]);
 
+        const imageBrand = await this.storage.generateSignedUrl(brand.imageKey);
+
         return PayloadResponse.toVehicleResponse(vehicle, {
-          vehicleImage: image,
-          brand: brand.name,
+          image: image,
+          brand: { name: brand.name, image: imageBrand },
           model: model.name,
           registrationProvince: province.name,
         });

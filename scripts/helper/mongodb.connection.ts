@@ -1,12 +1,14 @@
 import { MongoClient } from 'mongodb';
 import { connect } from 'mongoose';
 
-export async function connectionMongo(uri) {
+export async function connectionMongo(uri: string): Promise<MongoClient> {
   const client = new MongoClient(uri);
   return client.connect();
 }
 
-export async function connectionMongoose(uri, dbName) {
-  const client = connect(uri, { dbName });
-  return client;
+export async function connectionMongoose(
+  uri: string,
+  dbName: string
+): Promise<void> {
+  await connect(uri, { dbName });
 }

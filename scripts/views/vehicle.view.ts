@@ -13,7 +13,6 @@ import { connectionMongo } from '../helper/mongodb.connection';
     const collectionViewName = 'vehicles-view';
     const conn = await connectionMongo(url);
     const db = conn.db(dbName);
-    const collection = db.collection(collectionViewName);
 
     const collections = await db.listCollections().toArray();
     const collectionNames = collections.map((c) => c.name);
