@@ -52,7 +52,9 @@ export class VehicleImpl implements VehicleService {
     const queryOptions: estypes.SearchRequest = {
       from: skip,
       size: limit,
-      sort: `createdAt:${sorting ?? Sorting.ASC}`,
+      sort: {
+        _score: { order: sorting ?? Sorting.DESC },
+      } as estypes.SortOptions,
     };
 
     this.logger.time('Vehicle search');
