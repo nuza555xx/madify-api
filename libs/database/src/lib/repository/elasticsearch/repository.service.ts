@@ -2,8 +2,7 @@ import { estypes } from '@elastic/elasticsearch';
 import { ElasticsearchIndexes } from '@madify-api/utils/config';
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { Types } from 'mongoose';
-import { Vehicle } from '../../schema/vehicle.schema';
+import { IVehicle } from '../../interface/vehicle.interface';
 import { IElasticRepository } from './repository.abstract';
 import { VehicleQuery } from './repository.interface';
 import { PrepareQuery } from './repository.query';
@@ -16,8 +15,8 @@ export class RepositoryElasticImpl implements IElasticRepository {
   async findVehicles(
     query: VehicleQuery,
     options?: estypes.SearchRequest
-  ): Promise<Vehicle[]> {
-    const elasticResult = await this.elasticsearchService.search<Vehicle>({
+  ): Promise<IVehicle[]> {
+    const elasticResult = await this.elasticsearchService.search<IVehicle>({
       index: ElasticsearchIndexes.VEHICLE,
       query: this.filters.findVehicleFilters(query),
       ...options,
@@ -25,9 +24,9 @@ export class RepositoryElasticImpl implements IElasticRepository {
 
     return elasticResult.hits.hits.map(({ _id, _source }) => {
       return {
-        _id: new Types.ObjectId(_id),
+        _id: _id,
         ..._source,
-      } as Vehicle;
+      } as IVehicle;
     });
   }
 }

@@ -18,6 +18,11 @@ export class PrepareQuery {
         },
       });
 
+    if (query?.accountId)
+      filters.push({
+        match: { 'accountId.keyword': query.accountId },
+      });
+
     return filters.length
       ? { bool: { must: filters } }
       : { bool: { must: { match_all: {} } } };

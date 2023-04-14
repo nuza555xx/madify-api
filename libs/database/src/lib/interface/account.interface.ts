@@ -1,4 +1,7 @@
 import { AcceptPlatform, SocialProvider } from '../enum/user.enum';
+import { Province } from '../schema/province.model.schema';
+import { VehicleBrand } from '../schema/vehicle.brand.schema';
+import { VehicleModel } from '../schema/vehicle.model.schema';
 import { RequestMetadata } from './global.interface';
 
 export interface IRegisterWithEmail extends RequestMetadata {
@@ -88,8 +91,8 @@ export interface ICreateVehicle {
 
 export interface IResponseVehicle {
   id: string;
-  brand: string;
-  model: string;
+  brand: string | VehicleBrand;
+  model: string | VehicleModel;
   vehicleRegistration: string;
-  registrationProvince: string;
+  registrationProvince: string | Province;
 }

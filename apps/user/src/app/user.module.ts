@@ -3,6 +3,7 @@ import { MadifyConfigModule } from '@madify-api/utils/config';
 import { MadifyUtilsInterceptorModule } from '@madify-api/utils/interceptor';
 import {
   MadifyCacheModule,
+  MadifyElasticsearchModule,
   MadifyJwtConfigModule,
   MadifyThrottlerModule,
 } from '@madify-api/utils/module';
@@ -21,6 +22,7 @@ import { UserController } from './user.controller';
     MadifyCacheModule,
     MadifyUtilsInterceptorModule,
     MadifyUtilsProviderModule,
+    MadifyElasticsearchModule,
   ],
   controllers: [UserController],
   providers: [

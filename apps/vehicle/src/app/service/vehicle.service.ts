@@ -70,26 +70,18 @@ export class VehicleImpl implements VehicleService {
 
     const vehiclesResponse = await Promise.all(
       vehicles.map(async (vehicle) => {
-        const [image, brand, model, province] = await Promise.all([
+        const [imageVehicle, imageBrand] = await Promise.all([
           this.storage.generateSignedUrl(vehicle.imageKey),
-          this.repositoryMongo.findVehicleBrand({
-            slug: vehicle.brand,
-          }),
-          this.repositoryMongo.findVehicleModel({
-            slug: vehicle.model,
-          }),
-          this.repositoryMongo.findProvince({
-            slug: vehicle.registrationProvince,
-          }),
+          this.storage.generateSignedUrl(vehicle.brand.imageKey),
         ]);
 
-        const imageBrand = await this.storage.generateSignedUrl(brand.imageKey);
-
         return PayloadResponse.toVehicleResponse(vehicle, {
-          image: image,
-          brand: { id: brand._id, name: brand.name, image: imageBrand },
-          model: { id: model._id, name: model.name },
-          registrationProvince: province.name,
+          image: imageVehicle,
+          brand: {
+            id: vehicle.brand._id,
+            name: vehicle.brand.name,
+            image: imageBrand,
+          },
         });
       })
     );
