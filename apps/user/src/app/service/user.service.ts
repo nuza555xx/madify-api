@@ -113,8 +113,8 @@ export class UserImpl implements UserService {
 
         return PayloadResponse.toVehicleResponse(vehicle, {
           image: image,
-          brand: { name: brand.name, image: imageBrand },
-          model: model.name,
+          brand: { id: brand._id, name: brand.name, image: imageBrand },
+          model: { id: model._id, name: model.name },
           registrationProvince: province.name,
         });
       })

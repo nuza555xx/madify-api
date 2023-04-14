@@ -2,6 +2,7 @@ import { estypes } from '@elastic/elasticsearch';
 import { ElasticsearchIndexes } from '@madify-api/utils/config';
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { Types } from 'mongoose';
 import { Vehicle } from '../../schema/vehicle.schema';
 import { IElasticRepository } from './repository.abstract';
 import { VehicleQuery } from './repository.interface';
@@ -22,6 +23,11 @@ export class RepositoryElasticImpl implements IElasticRepository {
       ...options,
     });
 
-    return elasticResult.hits.hits.map(({ _source }) => _source);
+    return elasticResult.hits.hits.map(({ _id, _source }) => {
+      return {
+        _id: new Types.ObjectId(_id),
+        ..._source,
+      } as Vehicle;
+    });
   }
 }
