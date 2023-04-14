@@ -10,10 +10,16 @@ export class PrepareQuery {
         multi_match: {
           query: query.search,
           fields: [
-            'brand',
-            'model',
+            'brand.name.th',
+            'brand.name.en',
+            'brand.name.slug',
+            'model.name.th',
+            'model.name.en',
+            'model.name.slug',
+            'registrationProvince.name.th',
+            'registrationProvince.name.en',
+            'registrationProvince.name.slug',
             'vehicleRegistration',
-            'registrationProvince',
           ],
         },
       });
