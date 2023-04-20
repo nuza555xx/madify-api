@@ -34,7 +34,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^8.6.0",
     "@fastify/compress": "^6.2.1",
-    "@fastify/csrf-protection": "^6.2.0",
+    "@fastify/csrf-protection": "^6.3.0",
     "@fastify/helmet": "^10.1.0",
     "@fastify/static": "^6.10.0",
     "@google-cloud/storage": "^6.9.5",
