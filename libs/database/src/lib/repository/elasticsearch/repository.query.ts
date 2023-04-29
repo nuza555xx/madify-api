@@ -9,7 +9,11 @@ export class PrepareQuery {
       filters.push({
         multi_match: {
           query: query.search,
+          type: query?.search.match(/\s/g)?.length
+            ? 'best_fields'
+            : 'phrase_prefix',
           fields: [
+            'vehicleRegistration',
             'brand.name.th',
             'brand.name.en',
             'brand.name.slug',
@@ -19,7 +23,6 @@ export class PrepareQuery {
             'registrationProvince.name.th',
             'registrationProvince.name.en',
             'registrationProvince.name.slug',
-            'vehicleRegistration',
           ],
         },
       });

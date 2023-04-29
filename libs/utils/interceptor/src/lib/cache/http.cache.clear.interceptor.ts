@@ -1,3 +1,4 @@
+import { MadifyLogger } from '@madify-api/utils/common';
 import { MadifyException } from '@madify-api/utils/exception';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
@@ -14,6 +15,7 @@ import { FastifyRequest } from 'fastify';
 import { Observable } from 'rxjs';
 @Injectable()
 export class HttpCacheClearInterceptor implements NestInterceptor {
+  private logger = new MadifyLogger(HttpCacheClearInterceptor.name);
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private reflector: Reflector
@@ -36,6 +38,8 @@ export class HttpCacheClearInterceptor implements NestInterceptor {
       const sharedCacheKey = keys.filter((el: string) =>
         el.match(/shared-cache-/g)
       );
+
+      this.logger.log(JSON.stringify(sharedCacheKey));
 
       await Promise.all([
         ...Object.keys(settings).map((delKey) => this.cacheManager.del(delKey)),
