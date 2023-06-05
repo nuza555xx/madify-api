@@ -3,6 +3,7 @@ import {
   AuthGuard,
   HttpCacheClearInterceptor,
   HttpCacheIndividualInterceptor,
+  HttpCacheSharedClearInterceptor,
   HttpCacheSharedWithQueryInterceptor,
 } from '@madify-api/utils/interceptor';
 import { CacheKey } from '@nestjs/cache-manager';
@@ -36,7 +37,7 @@ export const MadifyAuthorizeAndClearCached = (cacheConfig: ICacheKey) => {
     ApiBearerAuth('JSON Web Token Authorization'),
     CacheKey(cacheConfig.name),
     UseGuards(AuthGuard),
-    UseInterceptors(HttpCacheClearInterceptor)
+    UseInterceptors(HttpCacheClearInterceptor, HttpCacheSharedClearInterceptor)
   );
 };
 

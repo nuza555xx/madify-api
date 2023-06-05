@@ -1,4 +1,3 @@
-import { MadifyLogger } from '@madify-api/utils/common';
 import { MadifyException } from '@madify-api/utils/exception';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
@@ -15,7 +14,6 @@ import { FastifyRequest } from 'fastify';
 import { Observable } from 'rxjs';
 @Injectable()
 export class HttpCacheClearInterceptor implements NestInterceptor {
-  private logger = new MadifyLogger(HttpCacheClearInterceptor.name);
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private reflector: Reflector
@@ -24,7 +22,7 @@ export class HttpCacheClearInterceptor implements NestInterceptor {
   async intercept(
     ctx: ExecutionContext,
     next: CallHandler
-  ): Promise<Observable<any>> {
+  ): Promise<Observable<unknown>> {
     const cacheKey = this.reflector.get(CACHE_KEY_METADATA, ctx.getHandler());
     if (cacheKey) {
       const context = ctx.switchToHttp();
@@ -34,18 +32,8 @@ export class HttpCacheClearInterceptor implements NestInterceptor {
       const settingsString = await this.cacheManager.get<string>(token);
       const settings = settingsString ? JSON.parse(settingsString) : {};
 
-      const keys = await this.cacheManager.store.keys();
-      const sharedCacheKey = keys.filter((el: string) =>
-        el.match(/shared-cache-/g)
-      );
-
-      this.logger.log(JSON.stringify(sharedCacheKey));
-
       await Promise.all([
         ...Object.keys(settings).map((delKey) => this.cacheManager.del(delKey)),
-        ...Object.keys(sharedCacheKey).map((delKey) =>
-          this.cacheManager.del(delKey)
-        ),
         this.cacheManager.del(token),
       ]);
     }

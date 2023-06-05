@@ -35,6 +35,7 @@ export interface ILoginWithSocial extends RequestMetadata {
 export interface IResponseLogin {
   accessToken: string;
   refreshToken: string;
+  profile: IResponseProfile;
 }
 
 export interface IGenerateToken {

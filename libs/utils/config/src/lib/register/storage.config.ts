@@ -10,6 +10,6 @@ export const storageConfig = registerAs(
     clientId: process.env.CLIENT_ID,
     privateKey: process.env.PRIVATE_KEY?.replace(/\\n/gm, '\n'),
     bucketName: process.env.BUCKET_NAME,
-    expired: Number(process.env.REDIS_CACHE_SHARED_TTL ?? 1000) * 60 * 60,
+    expired: Number(process.env.REDIS_SHARED_TTL ?? 1000) * 60 * 60,
   })
 );
