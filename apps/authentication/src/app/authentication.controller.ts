@@ -10,7 +10,6 @@ import {
   RequestMeta,
 } from '@madify-api/utils/decorator';
 import { Body, Delete, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   LoginWithEmailDto,
   LoginWithSocialDto,
@@ -105,7 +104,6 @@ export class AuthenticationController {
   }
 
   @Post('refresh-token')
-  @ApiBearerAuth('JSON Web Token Authorization')
   @MadifySwaggerHeaderAuth()
   async refreshToken(
     @RequestMeta() { platform, uuid }: RequestMetadata,

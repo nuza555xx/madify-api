@@ -8,7 +8,7 @@ export interface IRedisConfig {
   host: string;
   password: string;
   port: number;
-  db: string;
+  db: number;
   ttl: number;
   store?: unknown;
 }

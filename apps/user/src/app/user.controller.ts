@@ -41,8 +41,8 @@ export class UserController {
     @Auth() auth: Authorizer,
     @Param() { accountId }: GetProfileParams
   ): Promise<IResponseProfile> {
-    auth.requestAccessForAccount(accountId);
-    return this.userService.getProfile(accountId);
+    if (accountId !== 'me') auth.requestAccessForAccount(accountId);
+    return this.userService.getProfile(auth.account.id);
   }
 
   @Put(':accountId')

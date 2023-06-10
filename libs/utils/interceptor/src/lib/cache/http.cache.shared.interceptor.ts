@@ -16,8 +16,7 @@ export class HttpCacheSharedWithQueryInterceptor extends CacheInterceptor {
 
     if (cacheKey) {
       const request = context.switchToHttp().getRequest<FastifyRequest>();
-
-      return `shared-cache-${cacheKey}-${request.url}`;
+      return `${cacheKey}-${request.url}`;
     }
 
     return super.trackBy(context);

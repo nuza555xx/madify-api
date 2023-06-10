@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HttpCacheClearInterceptor } from './cache/http.cache.clear.interceptor';
+import { HttpCacheSharedClearInterceptor } from './cache/http.cache.clear.shared.interceptor';
 import { HttpCacheIndividualInterceptor } from './cache/http.cache.individual.interceptor';
 import { HttpCacheSharedWithQueryInterceptor } from './cache/http.cache.shared.interceptor';
 import { AuthGuard } from './guard/auth.guard';
@@ -17,5 +18,6 @@ export {
   HttpCacheClearInterceptor,
   HttpCacheIndividualInterceptor,
   HttpCacheSharedWithQueryInterceptor,
+  HttpCacheSharedClearInterceptor,
   MadifyRestLogger,
 };

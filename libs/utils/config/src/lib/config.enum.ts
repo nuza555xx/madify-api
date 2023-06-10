@@ -2,6 +2,7 @@ export enum APIPrefix {
   AUTHENTICATION = 'api/authentication',
   USER = 'api/user',
   VEHICLE = 'api/vehicle',
+  QUEUE = 'api/queue',
 }
 
 export enum ConfigKey {
@@ -12,8 +13,13 @@ export enum ConfigKey {
   MONGOOSE = 'mongoose',
   THROTTLER = 'throttler',
   STORAGE = 'storage',
+  QUEUE = 'queue',
 }
 
 export enum ElasticsearchIndexes {
   VEHICLE = 'vehicles',
+}
+
+export enum QueueName {
+  NOTIFY = 'notify',
 }

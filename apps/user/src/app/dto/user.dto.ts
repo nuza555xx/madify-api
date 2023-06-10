@@ -16,12 +16,11 @@ import { Types } from 'mongoose';
 export class GetProfileParams {
   @ApiProperty({
     name: 'accountId',
-    example: new Types.ObjectId(),
+    example: '',
     description: 'This is a required property',
     required: true,
   })
   @IsNotEmpty()
-  @IsMongoId()
   @IsString()
   accountId: string;
 }

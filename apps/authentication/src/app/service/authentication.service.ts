@@ -9,6 +9,7 @@ import {
   IRegisterWithEmail,
   IRegisterWithSocial,
   IResponseLogin,
+  PayloadResponse,
   REPOSITORY_MONGO_PROVIDE,
 } from '@madify-api/database';
 import { MadifyHash } from '@madify-api/utils/common';
@@ -88,6 +89,7 @@ export class AuthenticationImpl implements AuthenticationService {
     return {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
+      profile: PayloadResponse.toProfileResponse(account),
     };
   }
 
@@ -121,6 +123,7 @@ export class AuthenticationImpl implements AuthenticationService {
     return {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
+      profile: PayloadResponse.toProfileResponse(account),
     };
   }
 
@@ -174,6 +177,7 @@ export class AuthenticationImpl implements AuthenticationService {
     return {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
+      profile: PayloadResponse.toProfileResponse(account),
     };
   }
 
@@ -234,6 +238,7 @@ export class AuthenticationImpl implements AuthenticationService {
     return {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
+      profile: PayloadResponse.toProfileResponse(account),
     };
     // if (![dto.platform, dto.uuid].every((exists) => exists))
     //   throw new MadifyException('MISSING_METADATA_HEADERS');
@@ -346,6 +351,7 @@ export class AuthenticationImpl implements AuthenticationService {
     return {
       accessToken: token.accessToken,
       refreshToken: token.refreshToken,
+      profile: PayloadResponse.toProfileResponse(account),
     };
   }
 }
