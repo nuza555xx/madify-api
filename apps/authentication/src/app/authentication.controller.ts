@@ -1,4 +1,4 @@
-import { IResponseLogin, RequestMetadata } from '@madify-api/database';
+import { RequestMetadata, ResponseLogin } from '@madify-api/database';
 import { APIPrefix } from '@madify-api/utils/config';
 import {
   Auth,
@@ -34,7 +34,7 @@ export class AuthenticationController {
   registerWithEmail(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: RegisterWithEmailDto
-  ): Promise<IResponseLogin> {
+  ): Promise<ResponseLogin> {
     return this.authService.registerWithEmail({
       ...dto,
       ip,
@@ -48,7 +48,7 @@ export class AuthenticationController {
   registerWithSocial(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: RegisterWithSocialDto
-  ): Promise<IResponseLogin> {
+  ): Promise<ResponseLogin> {
     return this.authService.registerWithSocial({
       ...dto,
       ip,
@@ -62,7 +62,7 @@ export class AuthenticationController {
   loginWithEmail(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: LoginWithEmailDto
-  ): Promise<IResponseLogin> {
+  ): Promise<ResponseLogin> {
     return this.authService.loginWithEmail({
       ...dto,
       ip,
@@ -76,7 +76,7 @@ export class AuthenticationController {
   loginWithSocial(
     @RequestMeta() { ip, platform, uuid }: RequestMetadata,
     @Body() dto: LoginWithSocialDto
-  ): Promise<IResponseLogin> {
+  ): Promise<ResponseLogin> {
     return this.authService.loginWithSocial({
       ...dto,
       ip,

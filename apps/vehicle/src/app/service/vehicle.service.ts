@@ -1,19 +1,19 @@
 import { estypes } from '@elastic/elasticsearch';
 import {
-  ICreateVehicle,
-  IElasticRepository,
-  IGetVehicleList,
-  IMongoRepository,
-  IResponseVehicle,
+  ElasticRepository,
+  GetVehicleList,
   Meta,
+  MongoRepository,
   PayloadResponse,
   REPOSITORY_ELS_PROVIDE,
   REPOSITORY_MONGO_PROVIDE,
   ResponseDto,
+  ResponseVehicle,
+  ResponseVehicleBrand,
+  ResponseVehicleModel,
   Sorting,
 } from '@madify-api/database';
 import { MadifyLogger } from '@madify-api/utils/common';
-import { MadifyException } from '@madify-api/utils/exception';
 import { STORAGE_PROVIDE, StorageService } from '@madify-api/utils/provider';
 import { Inject, Injectable } from '@nestjs/common';
 import { VehicleService } from './vehicle.abstract';
@@ -23,32 +23,18 @@ export class VehicleImpl implements VehicleService {
   private readonly logger = new MadifyLogger(VehicleService.name);
   constructor(
     @Inject(REPOSITORY_MONGO_PROVIDE)
-    private readonly repositoryMongo: IMongoRepository,
+    private readonly repositoryMongo: MongoRepository,
     @Inject(REPOSITORY_ELS_PROVIDE)
-    private readonly repositoryElastic: IElasticRepository,
+    private readonly repositoryElastic: ElasticRepository,
     @Inject(STORAGE_PROVIDE) private readonly storage: StorageService
   ) {}
-
-  async createVehicle(
-    body: ICreateVehicle,
-    accountId: string
-  ): Promise<IResponseVehicle> {
-    const vehicle = await this.repositoryMongo.createVehicle({
-      ...body,
-      accountId: accountId,
-    });
-
-    if (!vehicle) throw new MadifyException('SOMETHING_WRONG');
-
-    return PayloadResponse.toVehicleResponse(vehicle);
-  }
 
   async listVehicle({
     skip = 0,
     limit,
     sorting,
     ...query
-  }: IGetVehicleList): Promise<ResponseDto<IResponseVehicle[]>> {
+  }: GetVehicleList): Promise<ResponseDto<ResponseVehicle[]>> {
     const queryOptions: estypes.SearchRequest = {
       from: skip,
       size: limit,
@@ -60,9 +46,7 @@ export class VehicleImpl implements VehicleService {
     this.logger.time('Vehicle search');
 
     const vehicles = await this.repositoryElastic.findVehicles(
-      {
-        ...query,
-      },
+      { ...query },
       queryOptions
     );
 
@@ -70,25 +54,47 @@ export class VehicleImpl implements VehicleService {
 
     const vehiclesResponse = await Promise.all(
       vehicles.map(async (vehicle) => {
-        const [imageVehicle, imageBrand] = await Promise.all([
-          this.storage.generateSignedUrl(vehicle.imageKey),
+        const [image, imageBrand] = await Promise.all([
+          this.storage.generateSignedUrl(vehicle.image.thumbnail.key),
           this.storage.generateSignedUrl(vehicle.brand.imageKey),
         ]);
 
         return PayloadResponse.toVehicleResponse(vehicle, {
-          image: imageVehicle,
-          brand: {
-            id: vehicle.brand._id,
-            name: vehicle.brand.name,
-            image: imageBrand,
+          imageVehicle: {
+            width: vehicle.image.thumbnail.width,
+            height: vehicle.image.thumbnail.height,
+            key: vehicle.image.thumbnail.key,
+            url: image,
           },
+          imageBrand,
         });
       })
     );
 
-    return ResponseDto.ok<IResponseVehicle[]>({
+    return ResponseDto.ok<ResponseVehicle[]>({
       payload: vehiclesResponse,
       meta: Meta.fromDocuments(vehicles, skip, limit),
     });
+  }
+
+  async listVehicleBrand(): Promise<ResponseVehicleBrand[]> {
+    const brands = await this.repositoryMongo.findVehicleBrands({});
+
+    return Promise.all(
+      brands.map(async (brand) => {
+        const imageBrand = await this.storage.generateSignedUrl(brand.imageKey);
+        return PayloadResponse.toVehicleBrandResponse(brand, { imageBrand });
+      })
+    );
+  }
+
+  async listVehicleModel(brand: string): Promise<ResponseVehicleModel[]> {
+    const models = await this.repositoryMongo.findVehicleModels({ brand });
+
+    return Promise.all(
+      models.map(async (model) => {
+        return PayloadResponse.toVehicleModelResponse(model);
+      })
+    );
   }
 }

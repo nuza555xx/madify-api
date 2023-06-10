@@ -22,3 +22,24 @@ export class Name {
   @Prop({ type: SchemaTypes.String })
   en: string;
 }
+
+@Schema({ id: false, _id: false, versionKey: false })
+export class Resolution {
+  @Prop({ type: SchemaTypes.String })
+  key: string;
+
+  @Prop({ type: SchemaTypes.Number })
+  width: number;
+
+  @Prop({ type: SchemaTypes.Number })
+  height: number;
+}
+
+@Schema({ id: false, _id: false, versionKey: false })
+export class ImageSchema {
+  @Prop({ type: Resolution })
+  thumbnail: Resolution;
+
+  @Prop({ type: Resolution })
+  original: Resolution;
+}

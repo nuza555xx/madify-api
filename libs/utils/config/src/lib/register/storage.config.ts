@@ -1,10 +1,10 @@
 import { registerAs } from '@nestjs/config';
 import { ConfigKey } from '../config.enum';
-import { IStorageConfig } from '../config.interface';
+import { StorageConfig } from '../config.interface';
 
 export const storageConfig = registerAs(
   ConfigKey.STORAGE,
-  (): IStorageConfig => ({
+  (): StorageConfig => ({
     projectId: process.env.PROJECT_ID,
     clientEmail: process.env.CLIENT_EMAIL,
     clientId: process.env.CLIENT_ID,

@@ -1,10 +1,10 @@
 import { estypes } from '@elastic/elasticsearch';
-import { IVehicle } from '../../interface/vehicle.interface';
+import { VehicleELS } from '../../interface/vehicle.interface';
 import { VehicleQuery } from './repository.interface';
 
-export abstract class IElasticRepository {
+export abstract class ElasticRepository {
   abstract findVehicles(
     query: VehicleQuery,
     options?: estypes.SearchRequest
-  ): Promise<IVehicle[]>;
+  ): Promise<VehicleELS[]>;
 }

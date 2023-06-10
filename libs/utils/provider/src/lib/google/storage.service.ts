@@ -1,19 +1,22 @@
 import { Bucket, GetSignedUrlConfig, Storage } from '@google-cloud/storage';
-import { ConfigKey, IStorageConfig } from '@madify-api/utils/config';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigKey, StorageConfig } from '@madify-api/utils/config';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import mimeTypes from 'mimetypes';
+import { IMAGE_PROVIDE, ImageService } from '../image/image.service';
 
 @Injectable()
 export class StorageService implements OnModuleInit {
   private storage: Storage;
-  private config: IStorageConfig;
+  private config: StorageConfig;
   private bucket: Bucket;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    @Inject(IMAGE_PROVIDE) private imageService: ImageService,
+    private readonly configService: ConfigService
+  ) {}
 
   onModuleInit() {
-    this.config = this.configService.get<IStorageConfig>(ConfigKey.STORAGE);
+    this.config = this.configService.get<StorageConfig>(ConfigKey.STORAGE);
 
     this.storage = new Storage({
       credentials: {
@@ -25,26 +28,13 @@ export class StorageService implements OnModuleInit {
     this.bucket = this.storage.bucket(this.config.bucketName);
   }
 
-  private extractMimeType(base64: string): string {
-    return base64.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/)[1];
-  }
-
-  private generateFilePath(filePath: string, mimeType: string): string {
-    return `${filePath}.${mimeTypes.detectExtension(mimeType)}`;
-  }
-
-  private createFileBufferFromBase64(base64: string): Buffer {
-    const base64EncodedImageString = base64.replace(
-      /^data:image\/\w+;base64,/,
-      ''
-    );
-    return Buffer.from(base64EncodedImageString, 'base64');
-  }
-
-  async uploadFile(filePath: string, base64: string): Promise<string> {
-    const mimeType = this.extractMimeType(base64);
-    const path = this.generateFilePath(filePath, mimeType);
-    const fileBuffer = this.createFileBufferFromBase64(base64);
+  async uploadFile(
+    filePath: string,
+    base64: string,
+    mimeType: string
+  ): Promise<string> {
+    const path = this.imageService.generateFilePath(filePath, mimeType);
+    const fileBuffer = this.imageService.createFileBufferFromBase64(base64);
     await this.saveFileToBucket(path, fileBuffer, mimeType);
     return path;
   }

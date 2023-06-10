@@ -1,34 +1,32 @@
 import {
   Account,
-  ILoginWithEmail,
-  ILoginWithSocial,
-  IRefreshToken,
-  IRegisterFirebase,
-  IRegisterWithEmail,
-  IRegisterWithSocial,
-  IResponseLogin,
+  LoginWithEmail,
+  LoginWithSocial,
+  RefreshToken,
+  RegisterFirebase,
+  RegisterWithEmail,
+  RegisterWithSocial,
+  ResponseLogin,
 } from '@madify-api/database';
 
 export abstract class AuthenticationService {
-  abstract registerWithEmail(dto: IRegisterWithEmail): Promise<IResponseLogin>;
+  abstract registerWithEmail(dto: RegisterWithEmail): Promise<ResponseLogin>;
 
-  abstract registerWithSocial(
-    dto: IRegisterWithSocial
-  ): Promise<IResponseLogin>;
+  abstract registerWithSocial(dto: RegisterWithSocial): Promise<ResponseLogin>;
 
-  abstract loginWithEmail(dto: ILoginWithEmail): Promise<IResponseLogin>;
+  abstract loginWithEmail(dto: LoginWithEmail): Promise<ResponseLogin>;
 
-  abstract loginWithSocial(dto: ILoginWithSocial): Promise<IResponseLogin>;
+  abstract loginWithSocial(dto: LoginWithSocial): Promise<ResponseLogin>;
 
   abstract registerToken(
-    dto: IRegisterFirebase,
+    dto: RegisterFirebase,
     account: Account
   ): Promise<void>;
 
   abstract unregisterToken(
-    dto: IRegisterFirebase,
+    dto: RegisterFirebase,
     account: Account
   ): Promise<void>;
 
-  abstract refreshToken(dto: IRefreshToken): Promise<IResponseLogin>;
+  abstract refreshToken(dto: RefreshToken): Promise<ResponseLogin>;
 }

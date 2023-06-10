@@ -33,9 +33,9 @@ steps:
         '--platform=managed',
         '--region=asia-southeast1',
         '--allow-unauthenticated',
-        '--min-instances=1',
-        '--max-instances=2',
-        '--memory=256Mi',
+        "--min-instances=1",
+        "--max-instances=2",
+        "--memory=256Mi",
       ]
 
 logsBucket: 'gs://crashboy-388808_cloudbuild'

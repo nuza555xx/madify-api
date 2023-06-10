@@ -22,7 +22,7 @@ export class Meta {
   };
 }
 
-export class ResponseDto<T = any> {
+export class ResponseDto<T> {
   @ApiProperty()
   payload: T;
 
@@ -39,7 +39,7 @@ export class ResponseDto<T = any> {
   };
 }
 
-export class RequestMetadata {
+export interface RequestMetadata {
   device?: string;
   platform?: AcceptPlatform;
   hostUrl?: string;
@@ -47,4 +47,27 @@ export class RequestMetadata {
   userAgent?: string;
   source?: string;
   uuid?: string;
+}
+
+export interface NameLocalize {
+  th: string;
+  en: string;
+}
+
+export interface ResponseResolution {
+  key: string;
+  width: number;
+  height: number;
+  url: string;
+}
+
+export interface ResponseImage {
+  thumbnail: ResponseResolution;
+  original: ResponseResolution;
+}
+
+export interface ResponseOptions {
+  imageBrand?: string;
+  imageVehicle?: ResponseResolution;
+  imageAvatar?: ResponseResolution;
 }

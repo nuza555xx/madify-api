@@ -1,25 +1,26 @@
-import { estypes } from '@elastic/elasticsearch';
 import {
+  CreateVehicle,
   EntityVisibility,
-  ICreateVehicle,
-  IElasticRepository,
-  IGetVehicleList,
-  IMongoRepository,
-  IResponseProfile,
-  IResponseVehicle,
-  IUpdateProfile,
+  GetVehicleList,
   Meta,
+  MongoRepository,
   PayloadResponse,
-  REPOSITORY_ELS_PROVIDE,
   REPOSITORY_MONGO_PROVIDE,
   ResponseDto,
-  Sorting,
+  ResponseProfile,
+  ResponseVehicle,
+  UpdateProfile,
 } from '@madify-api/database';
 import { MadifyLogger } from '@madify-api/utils/common';
 import { MadifyException } from '@madify-api/utils/exception';
-import { STORAGE_PROVIDE, StorageService } from '@madify-api/utils/provider';
+import {
+  IMAGE_PROVIDE,
+  ImageService,
+  STORAGE_PROVIDE,
+  StorageService,
+} from '@madify-api/utils/provider';
 import { Inject, Injectable } from '@nestjs/common';
-import { Types } from 'mongoose';
+import { QueryOptions, Types } from 'mongoose';
 import { UserService } from './user.abstract';
 
 @Injectable()
@@ -28,13 +29,12 @@ export class UserImpl implements UserService {
 
   constructor(
     @Inject(REPOSITORY_MONGO_PROVIDE)
-    private readonly repositoryMongo: IMongoRepository,
-    @Inject(REPOSITORY_ELS_PROVIDE)
-    private readonly repositoryElastic: IElasticRepository,
-    @Inject(STORAGE_PROVIDE) private readonly storage: StorageService
+    private readonly repositoryMongo: MongoRepository,
+    @Inject(STORAGE_PROVIDE) private readonly storage: StorageService,
+    @Inject(IMAGE_PROVIDE) private readonly imageService: ImageService
   ) {}
 
-  async getProfile(accountId: string): Promise<IResponseProfile> {
+  async getProfile(accountId: string): Promise<ResponseProfile> {
     const account = await this.repositoryMongo.findAccount({ id: accountId });
     if (!account) {
       throw new MadifyException('NOT_FOUND_DATA');
@@ -44,9 +44,9 @@ export class UserImpl implements UserService {
   }
 
   async updateProfile(
-    body: IUpdateProfile,
+    body: UpdateProfile,
     accountId: string
-  ): Promise<IResponseProfile> {
+  ): Promise<ResponseProfile> {
     const account = await this.repositoryMongo.findAccount({ id: accountId });
     if (!account) {
       throw new MadifyException('NOT_FOUND_DATA');
@@ -59,46 +59,102 @@ export class UserImpl implements UserService {
   }
 
   async createVehicle(
-    body: ICreateVehicle,
+    { image, ...body }: CreateVehicle,
     accountId: string
-  ): Promise<IResponseVehicle> {
+  ): Promise<ResponseVehicle> {
+    const vehicleExisting = await this.repositoryMongo.findVehicle({
+      registrationProvince: body.registrationProvince,
+      vehicleRegistration: body.vehicleRegistration,
+    });
+
+    if (vehicleExisting) throw new MadifyException('DATA_EXISTING');
+
     const vehicle = await this.repositoryMongo.createVehicle({
       ...body,
       accountId: new Types.ObjectId(accountId),
       visibility: EntityVisibility.Pending,
     });
 
-    if (body.image)
-      vehicle.imageKey = await this.storage.uploadFile(
-        `vehicle/${vehicle.id}/${vehicle.id}`,
-        body.image
-      );
+    const { thumbnail, original } = await this.imageService.setImage(image);
+    const [thumbnailKey, originalKey] = await Promise.all([
+      this.storage.uploadFile(
+        `vehicle/${vehicle.id}/${vehicle.id}-thumbnail`,
+        thumbnail.base64,
+        'webp'
+      ),
+      this.storage.uploadFile(
+        `vehicle/${vehicle.id}/${vehicle.id}-original`,
+        original.base64,
+        'webp'
+      ),
+    ]);
+
+    vehicle.image = {
+      thumbnail: {
+        key: thumbnailKey,
+        width: thumbnail.width,
+        height: thumbnail.height,
+      },
+      original: {
+        key: originalKey,
+        width: original.width,
+        height: original.height,
+      },
+    };
 
     if (!vehicle) throw new MadifyException('SOMETHING_WRONG');
 
-    const image = body.image
-      ? await this.storage.generateSignedUrl(vehicle.imageKey)
-      : null;
-
     await vehicle.save();
-    return PayloadResponse.toVehicleResponse(vehicle, { imageUrl: image });
+
+    const [brand, model, registrationProvince] = await Promise.all([
+      this.repositoryMongo.findVehicleBrand({ slug: vehicle.brand }),
+      this.repositoryMongo.findVehicleModel({ slug: vehicle.model }),
+      this.repositoryMongo.findProvince({ slug: vehicle.registrationProvince }),
+    ]);
+
+    const [imageVehicle, imageBrand] = await Promise.all([
+      this.storage.generateSignedUrl(vehicle.image.thumbnail.key),
+      this.storage.generateSignedUrl(brand.imageKey),
+    ]);
+
+    return PayloadResponse.toVehicleResponse(
+      {
+        id: vehicle.id,
+        accountId: String(vehicle.accountId),
+        insureId: String(vehicle.insureId),
+        expiredYear: vehicle.expiredYear,
+        insureRangeAmount: vehicle.insureRangeAmount,
+        vehicleRegistration: vehicle.vehicleRegistration,
+        visibility: vehicle.visibility,
+        brand,
+        model,
+        registrationProvince,
+        image: vehicle.image,
+      },
+      {
+        imageVehicle: {
+          width: vehicle.image.thumbnail.width,
+          height: vehicle.image.thumbnail.height,
+          key: vehicle.image.thumbnail.key,
+          url: imageVehicle,
+        },
+        imageBrand: imageBrand,
+      }
+    );
   }
 
   async listVehicle(
-    { skip = 0, limit, sorting, ...query }: IGetVehicleList,
+    { skip, limit, ...query }: GetVehicleList,
     accountId: string
-  ): Promise<ResponseDto<IResponseVehicle[]>> {
-    const queryOptions: estypes.SearchRequest = {
-      from: skip,
-      size: limit,
-      sort: {
-        _score: { order: sorting ?? Sorting.DESC },
-      } as estypes.SortOptions,
+  ): Promise<ResponseDto<ResponseVehicle[]>> {
+    const queryOptions: QueryOptions = {
+      skip: skip,
+      limit: limit,
     };
 
     this.logger.time('Vehicle search');
 
-    const vehicles = await this.repositoryElastic.findVehicles(
+    const vehicles = await this.repositoryMongo.findVehicles(
       {
         ...query,
         accountId,
@@ -110,23 +166,47 @@ export class UserImpl implements UserService {
 
     const vehiclesResponse = await Promise.all(
       vehicles.map(async (vehicle) => {
-        const [imageVehicle, imageBrand] = await Promise.all([
-          this.storage.generateSignedUrl(vehicle.imageKey),
-          this.storage.generateSignedUrl(vehicle.brand.imageKey),
+        const [brand, model, registrationProvince] = await Promise.all([
+          this.repositoryMongo.findVehicleBrand({ slug: vehicle.brand }),
+          this.repositoryMongo.findVehicleModel({ slug: vehicle.model }),
+          this.repositoryMongo.findProvince({
+            slug: vehicle.registrationProvince,
+          }),
         ]);
 
-        return PayloadResponse.toVehicleResponse(vehicle, {
-          image: imageVehicle,
-          brand: {
-            id: vehicle.brand._id,
-            name: vehicle.brand.name,
-            image: imageBrand,
+        const [imageVehicle, imageBrand] = await Promise.all([
+          this.storage.generateSignedUrl(vehicle.image.thumbnail.key),
+          this.storage.generateSignedUrl(brand.imageKey),
+        ]);
+
+        return PayloadResponse.toVehicleResponse(
+          {
+            id: vehicle.id,
+            accountId: String(vehicle.accountId),
+            insureId: String(vehicle.insureId),
+            expiredYear: vehicle.expiredYear,
+            insureRangeAmount: vehicle.insureRangeAmount,
+            vehicleRegistration: vehicle.vehicleRegistration,
+            visibility: vehicle.visibility,
+            brand,
+            model,
+            registrationProvince,
+            image: vehicle.image,
           },
-        });
+          {
+            imageVehicle: {
+              width: vehicle.image.thumbnail.width,
+              height: vehicle.image.thumbnail.height,
+              key: vehicle.image.thumbnail.key,
+              url: imageVehicle,
+            },
+            imageBrand: imageBrand,
+          }
+        );
       })
     );
 
-    return ResponseDto.ok<IResponseVehicle[]>({
+    return ResponseDto.ok<ResponseVehicle[]>({
       payload: vehiclesResponse,
       meta: Meta.fromDocuments(vehicles, skip, limit),
     });

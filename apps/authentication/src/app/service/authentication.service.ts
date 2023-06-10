@@ -1,19 +1,19 @@
 import {
   Account,
-  IGenerateToken,
-  ILoginWithEmail,
-  ILoginWithSocial,
-  IMongoRepository,
-  IRefreshToken,
-  IRegisterFirebase,
-  IRegisterWithEmail,
-  IRegisterWithSocial,
-  IResponseLogin,
+  GenerateToken,
+  LoginWithEmail,
+  LoginWithSocial,
+  MongoRepository,
   PayloadResponse,
   REPOSITORY_MONGO_PROVIDE,
+  RefreshToken,
+  RegisterFirebase,
+  RegisterWithEmail,
+  RegisterWithSocial,
+  ResponseLogin,
 } from '@madify-api/database';
 import { MadifyHash } from '@madify-api/utils/common';
-import { ConfigKey, IJwtConfig } from '@madify-api/utils/config';
+import { ConfigKey, JwtConfig } from '@madify-api/utils/config';
 import { MadifyException } from '@madify-api/utils/exception';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -25,14 +25,14 @@ import { AuthenticationService } from './authentication.abstract';
 export class AuthenticationImpl implements AuthenticationService {
   constructor(
     @Inject(REPOSITORY_MONGO_PROVIDE)
-    private readonly repositoryMongo: IMongoRepository,
+    private readonly repositoryMongo: MongoRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {}
 
-  private async generateAllToken(account: Account): Promise<IGenerateToken> {
+  private async generateAllToken(account: Account): Promise<GenerateToken> {
     const { accessTokenExpiresIn, refreshTokenExpiresIn, secret } =
-      this.configService.get<IJwtConfig>(ConfigKey.JWT);
+      this.configService.get<JwtConfig>(ConfigKey.JWT);
 
     const accessTokenExpiration = DateTime.now()
       .plus({ millisecond: accessTokenExpiresIn })
@@ -65,7 +65,7 @@ export class AuthenticationImpl implements AuthenticationService {
     };
   }
 
-  async registerWithEmail(dto: IRegisterWithEmail): Promise<IResponseLogin> {
+  async registerWithEmail(dto: RegisterWithEmail): Promise<ResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
 
@@ -99,7 +99,7 @@ export class AuthenticationImpl implements AuthenticationService {
     authToken,
     image,
     ...dto
-  }: IRegisterWithSocial): Promise<IResponseLogin> {
+  }: RegisterWithSocial): Promise<ResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
     let account = await this.repositoryMongo.findAccount({ email: dto.email });
@@ -127,7 +127,7 @@ export class AuthenticationImpl implements AuthenticationService {
     };
   }
 
-  async loginWithEmail(dto: ILoginWithEmail): Promise<IResponseLogin> {
+  async loginWithEmail(dto: LoginWithEmail): Promise<ResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
 
@@ -187,7 +187,7 @@ export class AuthenticationImpl implements AuthenticationService {
     authToken,
     image,
     ...dto
-  }: ILoginWithSocial): Promise<IResponseLogin> {
+  }: LoginWithSocial): Promise<ResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
 
@@ -272,7 +272,7 @@ export class AuthenticationImpl implements AuthenticationService {
   }
 
   async registerToken(
-    { uuid, platform, firebaseToken }: IRegisterFirebase,
+    { uuid, platform, firebaseToken }: RegisterFirebase,
     account: Account
   ): Promise<void> {
     const device = account.devices?.find(
@@ -286,7 +286,7 @@ export class AuthenticationImpl implements AuthenticationService {
     await account.save();
   }
 
-  async unregisterToken(body: IRegisterFirebase, account: Account) {
+  async unregisterToken(body: RegisterFirebase, account: Account) {
     await this.repositoryMongo.updateAccount(
       { id: account._id },
       {
@@ -301,11 +301,11 @@ export class AuthenticationImpl implements AuthenticationService {
     );
   }
 
-  async refreshToken(dto: IRefreshToken): Promise<IResponseLogin> {
+  async refreshToken(dto: RefreshToken): Promise<ResponseLogin> {
     if (![dto.platform, dto.uuid].every((exists) => exists))
       throw new MadifyException('MISSING_METADATA_HEADERS');
 
-    const { secret } = this.configService.get<IJwtConfig>(ConfigKey.JWT);
+    const { secret } = this.configService.get<JwtConfig>(ConfigKey.JWT);
 
     const decode = this.jwtService.verify(dto.refreshToken, { secret });
 

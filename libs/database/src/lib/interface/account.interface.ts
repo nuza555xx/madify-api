@@ -1,16 +1,13 @@
 import { AcceptPlatform, SocialProvider } from '../enum/user.enum';
-import { Province } from '../schema/province.model.schema';
-import { VehicleBrand } from '../schema/vehicle.brand.schema';
-import { VehicleModel } from '../schema/vehicle.model.schema';
 import { RequestMetadata } from './global.interface';
 
-export interface IRegisterWithEmail extends RequestMetadata {
+export interface RegisterWithEmail extends RequestMetadata {
   email: string;
   password: string;
   displayName: string;
 }
 
-export interface IRegisterWithSocial extends RequestMetadata {
+export interface RegisterWithSocial extends RequestMetadata {
   email: string;
   displayName: string;
   socialId: string;
@@ -18,12 +15,12 @@ export interface IRegisterWithSocial extends RequestMetadata {
   authToken?: string;
   image?: string;
 }
-export interface ILoginWithEmail extends RequestMetadata {
+export interface LoginWithEmail extends RequestMetadata {
   email: string;
   password: string;
 }
 
-export interface ILoginWithSocial extends RequestMetadata {
+export interface LoginWithSocial extends RequestMetadata {
   email: string;
   displayName: string;
   socialId: string;
@@ -32,30 +29,30 @@ export interface ILoginWithSocial extends RequestMetadata {
   image?: string;
 }
 
-export interface IResponseLogin {
+export interface ResponseLogin {
   accessToken: string;
   refreshToken: string;
   profile: IResponseProfile;
 }
 
-export interface IGenerateToken {
+export interface GenerateToken {
   accessToken: string;
   refreshToken: string;
   accessTokenExpiration: Date;
   refreshTokenExpiration: Date;
 }
 
-export class IRegisterFirebase {
+export class RegisterFirebase {
   firebaseToken: string;
   uuid: string;
   platform: AcceptPlatform;
 }
 
-export interface IRefreshToken extends RequestMetadata {
+export interface RefreshToken extends RequestMetadata {
   refreshToken: string;
 }
 
-export interface IResponseProfile {
+export interface ResponseProfile {
   id: string;
   email: string;
   mobile: {
@@ -65,11 +62,11 @@ export interface IResponseProfile {
   displayName: string;
 }
 
-export interface IGetProfile {
+export interface GetProfile {
   accountId: string;
 }
 
-export interface IUpdateProfile {
+export interface UpdateProfile {
   email?: string;
   mobile?: {
     countryCode: string;
@@ -78,7 +75,7 @@ export interface IUpdateProfile {
   displayName?: string;
 }
 
-export interface ICreateVehicle {
+export interface CreateVehicle {
   insureId: string;
   brand: string;
   model: string;
@@ -87,13 +84,5 @@ export interface ICreateVehicle {
   registrationProvince: string;
   registrationCountry?: string;
   insureRangeAmount?: number;
-  image?: string;
-}
-
-export interface IResponseVehicle {
-  id: string;
-  brand: string | VehicleBrand;
-  model: string | VehicleModel;
-  vehicleRegistration: string;
-  registrationProvince: string | Province;
+  image: string;
 }

@@ -1,32 +1,59 @@
+import { ResponseProfile } from '../../interface/account.interface';
+import { ResponseOptions } from '../../interface/global.interface';
 import {
-  IResponseProfile,
-  IResponseVehicle,
-} from '../../interface/account.interface';
-import { IVehicle } from '../../interface/vehicle.interface';
+  ResponseVehicle,
+  ResponseVehicleBrand,
+  ResponseVehicleModel,
+  VehicleELS,
+} from '../../interface/vehicle.interface';
 import { Account } from '../../schema/account.schema';
-import { Vehicle } from '../../schema/vehicle.schema';
+import { VehicleBrand } from '../../schema/vehicle.brand.schema';
+import { VehicleModel } from '../../schema/vehicle.model.schema';
 
 export class PayloadResponse {
-  static toVehicleResponse<T>(
-    vehicle: IVehicle | Vehicle,
-    options?: Record<string, T>
-  ): IResponseVehicle {
+  static toVehicleResponse(
+    vehicle: VehicleELS,
+    options?: ResponseOptions
+  ): ResponseVehicle {
     return {
-      id: vehicle._id,
-      brand: vehicle.brand,
-      model: vehicle.model,
+      id: vehicle.id,
+      model: vehicle.model.name,
+      image: options.imageVehicle,
       vehicleRegistration: vehicle.vehicleRegistration,
-      registrationProvince: vehicle.registrationProvince,
-      ...options,
+      registrationProvince: vehicle.registrationProvince.name,
+      brand: {
+        name: vehicle.brand.name,
+        url: options.imageBrand,
+      },
     };
   }
 
-  static toProfileResponse(account: Account): IResponseProfile {
+  static toProfileResponse(account: Account): ResponseProfile {
     return {
       id: account._id,
       email: account.email,
       displayName: account.displayName,
       mobile: account.mobile,
+    };
+  }
+
+  static toVehicleBrandResponse(
+    brand: VehicleBrand,
+    options?: ResponseOptions
+  ): ResponseVehicleBrand {
+    return {
+      id: brand.id,
+      slug: brand.slug,
+      name: brand.name,
+      url: options.imageBrand,
+    };
+  }
+
+  static toVehicleModelResponse(model: VehicleModel): ResponseVehicleModel {
+    return {
+      id: model.id,
+      slug: model.slug,
+      name: model.name,
     };
   }
 }

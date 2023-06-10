@@ -39,7 +39,7 @@ export type ResultProvince = Province & {
   _id: Types.ObjectId;
 };
 
-export abstract class IMongoRepository {
+export abstract class MongoRepository {
   abstract createAccount(
     account: AnyKeys<Account>,
     queryOptions?: SaveOptions

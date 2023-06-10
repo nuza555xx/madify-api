@@ -1,4 +1,4 @@
-import { AcceptPlatform, ICacheKey } from '@madify-api/database';
+import { AcceptPlatform, CacheOption } from '@madify-api/database';
 import {
   AuthGuard,
   HttpCacheClearInterceptor,
@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeaders } from '@nestjs/swagger';
 
-export const MadifyAuthorize = (cacheConfig: ICacheKey) => {
+export const MadifyAuthorize = (cacheConfig: CacheOption) => {
   return applyDecorators(
     ApiBearerAuth('JSON Web Token Authorization'),
     CacheKey(cacheConfig.name),
@@ -32,7 +32,7 @@ export const MadifyBasicAuthorize = () => {
   );
 };
 
-export const MadifyAuthorizeAndClearCached = (cacheConfig: ICacheKey) => {
+export const MadifyAuthorizeAndClearCached = (cacheConfig: CacheOption) => {
   return applyDecorators(
     ApiBearerAuth('JSON Web Token Authorization'),
     CacheKey(cacheConfig.name),
@@ -41,7 +41,7 @@ export const MadifyAuthorizeAndClearCached = (cacheConfig: ICacheKey) => {
   );
 };
 
-export const MadifySharedCached = (cacheConfig: ICacheKey) => {
+export const MadifySharedCached = (cacheConfig: CacheOption) => {
   return applyDecorators(
     CacheKey(cacheConfig.name),
     CacheTTL(cacheConfig.ttlShared),
