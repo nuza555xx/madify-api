@@ -1,26 +1,26 @@
 import {
-  ICreateVehicle,
-  IGetVehicleList,
-  IResponseProfile,
-  IResponseVehicle,
-  IUpdateProfile,
+  CreateVehicle,
+  GetVehicleList,
   ResponseDto,
+  ResponseProfile,
+  ResponseVehicle,
+  UpdateProfile,
 } from '@madify-api/database';
 
 export abstract class UserService {
-  abstract getProfile(accountId: string): Promise<IResponseProfile>;
+  abstract getProfile(accountId: string): Promise<ResponseProfile>;
   abstract updateProfile(
-    body: IUpdateProfile,
+    body: UpdateProfile,
     accountId: string
-  ): Promise<IResponseProfile>;
+  ): Promise<ResponseProfile>;
 
   abstract createVehicle(
-    body: ICreateVehicle,
+    body: CreateVehicle,
     accountId: string
-  ): Promise<IResponseVehicle>;
+  ): Promise<ResponseVehicle>;
 
   abstract listVehicle(
-    query: IGetVehicleList,
+    query: GetVehicleList,
     accountId: string
-  ): Promise<ResponseDto<IResponseVehicle[]>>;
+  ): Promise<ResponseDto<ResponseVehicle[]>>;
 }

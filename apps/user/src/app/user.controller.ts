@@ -1,4 +1,4 @@
-import { IResponseProfile, IResponseVehicle } from '@madify-api/database';
+import { ResponseProfile, ResponseVehicle } from '@madify-api/database';
 import { APIPrefix, RedisCacheKey } from '@madify-api/utils/config';
 import {
   Auth,
@@ -40,9 +40,9 @@ export class UserController {
   getProfile(
     @Auth() auth: Authorizer,
     @Param() { accountId }: GetProfileParams
-  ): Promise<IResponseProfile> {
-    if (accountId !== 'me') auth.requestAccessForAccount(accountId);
-    return this.userService.getProfile(auth.account.id);
+  ): Promise<ResponseProfile> {
+    auth.requestAccessForAccount(accountId);
+    return this.userService.getProfile(accountId);
   }
 
   @Put(':accountId')
@@ -51,7 +51,7 @@ export class UserController {
     @Auth() auth: Authorizer,
     @Param() { accountId }: GetProfileParams,
     @Body() body: UpdateProfileDto
-  ): Promise<IResponseProfile> {
+  ): Promise<ResponseProfile> {
     auth.requestAccessForAccount(accountId);
     return this.userService.updateProfile(body, accountId);
   }
@@ -61,7 +61,7 @@ export class UserController {
   createVehicle(
     @Auth() { account }: Authorizer,
     @Body() body: CreateVehicleDto
-  ): Promise<IResponseVehicle> {
+  ): Promise<ResponseVehicle> {
     return this.userService.createVehicle(body, account.id);
   }
 

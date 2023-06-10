@@ -1,10 +1,10 @@
-export interface IJwtConfig {
+export interface JwtConfig {
   secret: string;
   accessTokenExpiresIn: number;
   refreshTokenExpiresIn: number;
 }
 
-export interface IRedisConfig {
+export interface RedisConfig {
   host: string;
   password: string;
   port: number;
@@ -13,18 +13,18 @@ export interface IRedisConfig {
   store?: unknown;
 }
 
-export interface IMongooseConfig {
+export interface MongooseConfig {
   uri: string;
   useNewUrlParser: boolean;
   useUnifiedTopology: boolean;
 }
 
-export interface IThrottlerConfig {
+export interface ThrottlerConfig {
   limit: number;
   ttl: number;
 }
 
-export interface IStorageConfig {
+export interface StorageConfig {
   projectId: string;
   clientEmail: string;
   clientId: string;

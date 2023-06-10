@@ -15,7 +15,7 @@ import { VehicleBrand } from '../../schema/vehicle.brand.schema';
 import { VehicleModel } from '../../schema/vehicle.model.schema';
 import { Vehicle } from '../../schema/vehicle.schema';
 import {
-  IMongoRepository,
+  MongoRepository,
   ResultAccount,
   ResultProvince,
   ResultVehicle,
@@ -25,7 +25,7 @@ import {
 import { PrepareQuery } from './repository.query';
 
 @Injectable()
-export class RepositoryMongoImpl implements IMongoRepository {
+export class RepositoryMongoImpl implements MongoRepository {
   private filters = new PrepareQuery();
   constructor(
     @InjectModel(Account.name) private accountModel: Model<Account>,

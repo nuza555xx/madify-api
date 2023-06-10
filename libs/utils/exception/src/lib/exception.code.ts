@@ -106,4 +106,9 @@ export const Errors = {
     code: '1020',
     message: 'Password is not matched. Please try again.',
   },
+  DATA_EXISTING: {
+    statusCode: 400,
+    code: '1021',
+    message: 'Data is existing. Please try again.',
+  },
 };

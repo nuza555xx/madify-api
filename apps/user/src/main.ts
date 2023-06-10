@@ -18,11 +18,12 @@ import { UserModule } from './app/user.module';
 async function bootstrap() {
   const prefix = APIPrefix.USER;
   const port = process.env.PORT || 3002;
-  const fastifyAdapter = new FastifyAdapter();
+  const fastifyAdapter = new FastifyAdapter({ bodyLimit: 10048576 });
   const app = await NestFactory.create<NestFastifyApplication>(
     UserModule,
     fastifyAdapter
   );
+
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(new MadifyExceptionFilter());

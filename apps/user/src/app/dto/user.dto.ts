@@ -168,13 +168,13 @@ export class CreateVehicleDto {
 
   @ApiProperty({
     name: 'image',
-    example: null,
+    example: 'data:image/[type];base64,...',
     description: 'This is a optional property',
     required: false,
   })
-  @IsOptional()
+  @IsNotEmpty()
   @Type(() => String)
-  image?: string;
+  image: string;
 }
 
 export class GetVehicleListQuery {
